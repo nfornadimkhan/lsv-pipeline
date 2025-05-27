@@ -1,0 +1,13 @@
+# Description: The structure of the data.
+# table types: kornertrag_relativ or kornertrag_absolut
+# treatment: intensive or both 
+# title: title of the table
+
+pdfs:
+  - filename: "winterweizen-sv-2023.pdf"
+    year: 2023
+    pages:
+      - number: 2
+        table_type: "kornertrag_relativ"
+        treatment: "intensive"
+        title: "Winterweizen - Kornertrag der Sorten in den LSV NRW 2023 bei angepasstem/intensivem Pflanzenschutz"

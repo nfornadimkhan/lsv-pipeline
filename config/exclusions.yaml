@@ -1,0 +1,12 @@
+# You can now use powerful pattern-based exclusions in your exclusions.yaml:
+# contains: Alle will exclude any row/column containing "Alle"
+# startswith: rel. 100 will exclude any row/column starting with "rel. 100"
+# endswith: wert would exclude any row/column ending with "wert"
+
+exclude_columns:
+  - contains: Mittelwert
+  - contains: Alle
+exclude_rows:
+  - startswith: rel. 100
+  - startswith: Alle
+  - endswith: alle
