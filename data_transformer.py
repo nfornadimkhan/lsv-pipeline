@@ -96,7 +96,7 @@ class DataTransformer:
             'z- h\nn t\ne a\nel nr\nk e\nr V\nE': 'Erkelenz-Venrath', 
             't\nr\ne\nw\nel\nt\nt\nMi': 'Mittelwert',
             'e\ns .)\ns h\nü g\nD n\ns ti\nu s\na O\nH (': 'Haus Düsse (Oberkassel)',
-            'n\ne- e\ng d\na ei\nL H': 'Lage-Heiden',
+            'n\ne- e\ng d\na ei\nL H': 'Hagen-Leidenhausen',
             'n\ne\nv\ne\nr\nG': 'Greven',
             '-\nn n\nei e\nt g\ns a\nWar All': 'Warstein-Allagen',
             'n\n- e\ng f\nr ö\ne h\nb n\nm e\no st\nBl ol\nH': 'Blomberg-Hohenfels',
@@ -109,15 +109,20 @@ class DataTransformer:
             't r e w el t t Mi': 'Mittelwert',
             'e s .) s h ü g D n s ti u s a O H (': 'Haus Düsse (Oberkassel)',
             'es .) sh üg Dn stiu sa OH (': 'Haus Düsse (Oberkassel)',
-            'n e- e g d a ei L H': 'Lage-Heiden',
-            'ne- eg da eiL H': 'Lage-Heiden',
+            'n e- e g d a ei L H': 'Hagen-Leidenhausen',
+            'ne- eg da eiL H': 'Hagen-Leidenhausen',
             'n e v e r G': 'Greven',
             '- n n ei e t g s a War All': 'Warstein-Allagen',
             '- nn eie tg sa WarAll': 'Warstein-Allagen',
             'n - e g f r ö e h b n m e o st Bl ol H': 'Blomberg-Hohenfels',
             'n - eg fr öe hb nm eo stBlolH': 'Blomberg-Hohenfels',
             'm * z e t t a r s e n zi ei u z d t e u r h ei sc b n ze g a n tr a Er Pfl': 'Ertrag bei angepasstem Pflanzenschutz',
-            'm * ze tt ar se nzieiu zd te ur heiscb nzeg an tra ErPfl': 'Ertrag bei angepasstem Pflanzenschutz'
+            'm * ze tt ar se nzieiu zd te ur heiscb nzeg an tra ErPfl': 'Ertrag bei angepasstem Pflanzenschutz',
+            # Add pattern for Differenz
+            'm . h e c t s s n s a e p z n e g a n fl a P u m z e z v n si e n er e ff nt Di /i': 'Differenz',
+            'm . h e c t s s n s a e p z n e g a n fl a P u m z e z v n si e n er e ff nt Di': 'Differenz',
+            'm . h e c t s s n s a e p z n e g a n fl a P u m z e z v n si e n er e ff nt Di /i': 'Differenz',
+            
         }
         
         # Check if text matches any known vertical pattern exactly
@@ -129,23 +134,31 @@ class DataTransformer:
         clean_text = re.sub(r'\s+', '', text)
         
         # Known location mappings based on character sequences
+        # Fix: Escape special characters in regex patterns
         location_mappings = {
-            'r)uih-Bnicneevprr[öo]eNK[(]': 'Kerpen-Buir (Nörvenich)',
-            'z-hnte[ae]nrelkr[ne]rVE': 'Erkelenz-Venrath',
-            'trewelttMi': 'Mittelwert',
-            'es[.)]sh[üu]gDnsti[ou]saOH[(]': 'Haus Düsse (Oberkassel)',
-            'ne-egdaeiLH': 'Lage-Heiden',
-            'neverG': 'Greven',
-            '-nneietgsaWarAll': 'Warstein-Allagen',
-            'n-egfr[öo]ehbnmeostBlolH': 'Blomberg-Hohenfels',
-            'mzettarsenzieiuzdteurheiscbnzegantraErPfl': 'Ertrag bei angepasstem Pflanzenschutz'
+            r'r\)uih-Bnicneevprr[öo]eNK\(\)': 'Kerpen-Buir (Nörvenich)',
+            r'z-hnte[ae]nrelkr[ne]rVE': 'Erkelenz-Venrath',
+            r'trewelttMi': 'Mittelwert',
+            r'es[.)]sh[üu]gDnsti[ou]saOH\(\)': 'Haus Düsse (Oberkassel)',
+            r'ne-egdaeiLH': 'Hagen-Leidenhausen',
+            r'neverG': 'Greven',
+            r'-nneietgsaWarAll': 'Warstein-Allagen',
+            r'n-egfr[öo]ehbnmeostBlolH': 'Blomberg-Hohenfels',
+            r'mzettarsenzieiuzdteurheiscbnzegantraErPfl': 'Ertrag bei angepasstem Pflanzenschutz',
+            # Add pattern for Differenz
+            r'm\.hectssnsaepznenganflaPumzezvnsienereffntDi': 'Differenz',
+            r'm\.hectssnsaepznenganflaPumzezvnsienereffntDi/i': 'Differenz',
         }
         
         # Check if the cleaned text matches any known mapping (using regex)
         for pattern, location in location_mappings.items():
-            if re.match(pattern, clean_text, re.IGNORECASE):
-                return location
-            
+            try:
+                if re.match(pattern, clean_text, re.IGNORECASE):
+                    return location
+            except re.error as e:
+                logger.warning(f"Regex error with pattern '{pattern}': {str(e)}")
+                continue
+        
         # If no exact match, try to identify patterns
         # Handle Mittelwert pattern
         if 'mittel' in clean_text.lower() or ('mi' in clean_text.lower() and 'wert' in clean_text.lower()):
@@ -154,6 +167,10 @@ class DataTransformer:
         # For Greven
         if clean_text.lower() in ['greven', 'neverG', 'neverG'.lower()]:
             return 'Greven'
+            
+        # Check for Differenz pattern
+        if 'differenz' in clean_text.lower() or 'ffntdi' in clean_text.lower():
+            return 'Differenz'
             
         # If result is too short or doesn't make sense, return original
         if len(clean_text) < 3:
@@ -196,6 +213,8 @@ class DataTransformer:
 
         # Find trial names (locations) from the table
         trial_names = []
+        excluded_columns = set()  # Keep track of columns to exclude
+        
         for row_idx, row_data in enumerate(full_table_data):
             if row_idx < actual_reference_row_idx:  # Look in header rows
                 if row_data and len(row_data) > 1 and row_data[1] and "Versuch" in str(row_data[1]):
@@ -204,13 +223,22 @@ class DataTransformer:
                     for col_idx in range(2, len(row_data)):
                         if col_idx < len(row_data) and row_data[col_idx]:
                             raw_trial_name = str(row_data[col_idx]).strip()
-                            if raw_trial_name and not self._matches_exclusion_pattern(raw_trial_name, self.exclude_columns):
-                                trial_name = self._reconstruct_vertical_text(raw_trial_name)
-                                if trial_name:
-                                    trial_names.append(trial_name)
-                                    logger.info(f"Extracted trial name: {trial_name} (from: {raw_trial_name}) at column {col_idx}")
+                            trial_name = self._reconstruct_vertical_text(raw_trial_name)
+                            
+                            # Check if this column should be excluded
+                            if (trial_name in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"] or 
+                                "Differenz" in trial_name or 
+                                self._matches_exclusion_pattern(raw_trial_name, self.exclude_columns)):
+                                excluded_columns.add(col_idx)
+                                logger.debug(f"Excluding column {col_idx}: Location {trial_name} is in exclusion list")
+                                continue
+                                
+                            if trial_name:
+                                trial_names.append((col_idx, trial_name))
+                                logger.info(f"Extracted trial name: {trial_name} (from: {raw_trial_name}) at column {col_idx}")
 
-        logger.info(f"Extracted trial names: {trial_names}")
+        logger.info(f"Extracted trial names: {[name for _, name in trial_names]}")
+        logger.info(f"Excluded columns: {sorted(excluded_columns)}")
 
         # Process data rows
         for row_idx, row_data in enumerate(full_table_data):
@@ -228,20 +256,12 @@ class DataTransformer:
             logger.info(f"Processing variety: {variety} at row {row_idx}")
 
             # Process each data column
-            for col_idx in range(2, len(row_data)):
-                if col_idx >= len(reference_row_content):
+            for col_idx, trial_name in trial_names:  # Only process columns with valid locations
+                if col_idx >= len(row_data) or col_idx >= len(reference_row_content):
                     continue
                     
                 value = self._clean_value(row_data[col_idx])
                 if value is not None:
-                    # Get trial name for this column
-                    trial_name = trial_names[col_idx - 2] if col_idx - 2 < len(trial_names) else f"Location_{col_idx}"
-                    
-                    # Skip if location is Mittelwert or Ertrag bei angepasstem Pflanzenschutz
-                    if trial_name in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"]:
-                        logger.debug(f"Skipping data point: Location is {trial_name} for variety {variety}")
-                        continue
-                    
                     # Calculate absolute value from relative value
                     ref_value = self._clean_value(reference_row_content[col_idx])
                     abs_value = None
@@ -277,18 +297,25 @@ class DataTransformer:
 
         # Extract trial names from headers
         trial_names = []
+        excluded_columns = set()  # Keep track of columns to exclude
+        
         for i, h in enumerate(headers):
-            if h and not self._matches_exclusion_pattern(h, self.exclude_columns):
+            if h:
                 trial_name = self._reconstruct_vertical_text(str(h))
-                # Skip if location is Mittelwert or Ertrag bei angepasstem Pflanzenschutz
-                if trial_name in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"]:
-                    logger.debug(f"Skipping location: {trial_name} at column {i}")
+                # Check if this column should be excluded
+                if (trial_name in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"] or 
+                    "Differenz" in trial_name or 
+                    self._matches_exclusion_pattern(h, self.exclude_columns)):
+                    excluded_columns.add(i)
+                    logger.debug(f"Excluding column {i}: Location {trial_name} is in exclusion list")
                     continue
+                    
                 if trial_name:
                     trial_names.append((i, trial_name))
                     logger.info(f"Found trial name: {trial_name} (from: {h}) at column {i}")
 
         logger.info(f"Extracted trial names: {[name for _, name in trial_names]}")
+        logger.info(f"Excluded columns: {sorted(excluded_columns)}")
         
         # Use trait from config or default
         trait_str = trait if trait else "Default Trait"
@@ -306,7 +333,7 @@ class DataTransformer:
             logger.info(f"Processing variety: {variety} at row {row_idx}")
 
             if treatment and treatment != 'Both':
-                for col_idx, trial_name in trial_names:
+                for col_idx, trial_name in trial_names:  # Only process columns with valid locations
                     if col_idx >= len(row):
                         continue
                     value = self._clean_value(row[col_idx])
@@ -324,7 +351,7 @@ class DataTransformer:
                         })
                         logger.info(f"Added data point: Variety={variety}, Location={trial_name}, Value={value}")
             else:
-                for col_idx, trial_name in trial_names:
+                for col_idx, trial_name in trial_names:  # Only process columns with valid locations
                     if col_idx >= len(row):
                         continue
                     st1_idx = col_idx + 1
