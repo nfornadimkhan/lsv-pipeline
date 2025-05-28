@@ -286,35 +286,62 @@ class DataTransformer:
 
     def _transform_absolute_table(self, year: int, headers: list, rows: list, treatment: Optional[str] = None,
                                   source: Optional[str] = None, trait: Optional[str] = None) -> list:
+        """Transform absolute table data into standardized format."""
         transformed_rows = []
+        logger.info(f"Transforming absolute table with {len(rows)} rows")
         
-        # Log table structure
-        logger.info(f"[cyan]Absolute Table Structure Analysis:[/cyan]")
-        logger.info(f"Headers: {headers}")
-        logger.info(f"Total rows: {len(rows)}")
-        for idx, row in enumerate(rows):
-            logger.info(f"Row {idx}: {row}")
-
         # Extract trial names from headers
         trial_names = []
         excluded_columns = set()  # Keep track of columns to exclude
         
-        for i, h in enumerate(headers):
-            if h:
-                trial_name = self._reconstruct_vertical_text(str(h))
-                # Check if this column should be excluded
-                if (trial_name in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"] or 
-                    "Differenz" in trial_name or 
-                    self._matches_exclusion_pattern(h, self.exclude_columns)):
-                    excluded_columns.add(i)
-                    logger.debug(f"Excluding column {i}: Location {trial_name} is in exclusion list")
-                    continue
-                    
-                if trial_name:
-                    trial_names.append((i, trial_name))
-                    logger.info(f"Found trial name: {trial_name} (from: {h}) at column {i}")
+        # Determine if this is a "Both" treatment table by checking header patterns
+        is_both_treatment = False
+        for h in headers:
+            if h and any(pattern in str(h).lower() for pattern in ['stufe 1', 'st 1', 'stufe 2', 'st 2']):
+                is_both_treatment = True
+                break
+        
+        # If treatment is explicitly "Both" or we detected both treatments in headers
+        if treatment == "Both" or is_both_treatment:
+            logger.info("Processing table with both treatments (Stufe 1 and Stufe 2)")
+            # Process headers to find location pairs
+            i = 0
+            while i < len(headers):
+                if i + 1 < len(headers) and headers[i] and headers[i+1]:
+                    location = self._reconstruct_vertical_text(str(headers[i]))
+                    # Check if this column should be excluded
+                    if (location in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"] or 
+                        "Differenz" in location or 
+                        self._matches_exclusion_pattern(headers[i], self.exclude_columns)):
+                        excluded_columns.add(i)
+                        excluded_columns.add(i+1)  # Also exclude the paired column
+                        logger.debug(f"Excluding columns {i} and {i+1}: Location {location} is in exclusion list")
+                        i += 2
+                        continue
+                        
+                    if location:
+                        trial_names.append((i, i+1, location))  # Store both column indices and location
+                        logger.info(f"Found trial name: {location} (from: {headers[i]}) at columns {i} and {i+1}")
+                i += 2
+        else:
+            logger.info("Processing table with single treatment")
+            # Process headers for single treatment
+            for i, h in enumerate(headers):
+                if h:
+                    location = self._reconstruct_vertical_text(str(h))
+                    # Check if this column should be excluded
+                    if (location in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"] or 
+                        "Differenz" in location or 
+                        self._matches_exclusion_pattern(h, self.exclude_columns)):
+                        excluded_columns.add(i)
+                        logger.debug(f"Excluding column {i}: Location {location} is in exclusion list")
+                        continue
+                        
+                    if location:
+                        trial_names.append((i, location))  # Store column index and location
+                        logger.info(f"Found trial name: {location} (from: {h}) at column {i}")
 
-        logger.info(f"Extracted trial names: {[name for _, name in trial_names]}")
+        logger.info(f"Extracted trial names: {[name[-1] for name in trial_names]}")
         logger.info(f"Excluded columns: {sorted(excluded_columns)}")
         
         # Use trait from config or default
@@ -332,10 +359,49 @@ class DataTransformer:
 
             logger.info(f"Processing variety: {variety} at row {row_idx}")
 
-            if treatment and treatment != 'Both':
-                for col_idx, trial_name in trial_names:  # Only process columns with valid locations
+            if is_both_treatment:
+                # Process both treatments (Stufe 1 and Stufe 2)
+                for st1_idx, st2_idx, trial_name in trial_names:
+                    if st1_idx >= len(row) or st2_idx >= len(row):
+                        continue
+                        
+                    # Process Stufe 1 (intensive)
+                    st1_value = self._clean_value(row[st1_idx])
+                    if st1_value is not None:
+                        transformed_rows.append({
+                            'Year': year,
+                            'Trial': f"{year}_whw_de_prt_lsv",
+                            'Trait': trait_str,
+                            'Variety': variety,
+                            'Location': trial_name,
+                            'Treatment': 'intensive',  # Always use 'intensive' for Stufe 1/St 1
+                            'RelativeValue': None,  # No relative value for absolute tables
+                            'AbsoluteValue': st1_value,
+                            'Source': source
+                        })
+                        logger.info(f"Added data point: Variety={variety}, Location={trial_name}, Treatment=intensive, Value={st1_value}")
+                    
+                    # Process Stufe 2 (extensive)
+                    st2_value = self._clean_value(row[st2_idx])
+                    if st2_value is not None:
+                        transformed_rows.append({
+                            'Year': year,
+                            'Trial': f"{year}_whw_de_prt_lsv",
+                            'Trait': trait_str,
+                            'Variety': variety,
+                            'Location': trial_name,
+                            'Treatment': 'extensive',  # Always use 'extensive' for Stufe 2/St 2
+                            'RelativeValue': None,  # No relative value for absolute tables
+                            'AbsoluteValue': st2_value,
+                            'Source': source
+                        })
+                        logger.info(f"Added data point: Variety={variety}, Location={trial_name}, Treatment=extensive, Value={st2_value}")
+            else:
+                # Process single treatment
+                for col_idx, trial_name in trial_names:
                     if col_idx >= len(row):
                         continue
+                        
                     value = self._clean_value(row[col_idx])
                     if value is not None:
                         transformed_rows.append({
@@ -344,48 +410,12 @@ class DataTransformer:
                             'Trait': trait_str,
                             'Variety': variety,
                             'Location': trial_name,
-                            'Treatment': treatment,
-                            'RelativeValue': None,
+                            'Treatment': treatment if treatment else "Default",  # Use treatment from config for single treatment tables
+                            'RelativeValue': None,  # No relative value for absolute tables
                             'AbsoluteValue': value,
                             'Source': source
                         })
-                        logger.info(f"Added data point: Variety={variety}, Location={trial_name}, Value={value}")
-            else:
-                for col_idx, trial_name in trial_names:  # Only process columns with valid locations
-                    if col_idx >= len(row):
-                        continue
-                    st1_idx = col_idx + 1
-                    st2_idx = col_idx + 2
-                    if st1_idx < len(row) and row[st1_idx]:
-                        value = self._clean_value(row[st1_idx])
-                        if value is not None:
-                            transformed_rows.append({
-                                'Year': year,
-                                'Trial': f"{year}_whw_de_prt_lsv",
-                                'Trait': trait_str,
-                                'Variety': variety,
-                                'Location': trial_name,
-                                'Treatment': 'St 1',
-                                'RelativeValue': None,
-                                'AbsoluteValue': value,
-                                'Source': source
-                            })
-                            logger.info(f"Added data point: Variety={variety}, Location={trial_name}, Treatment=St 1, Value={value}")
-                    if st2_idx < len(row) and row[st2_idx]:
-                        value = self._clean_value(row[st2_idx])
-                        if value is not None:
-                            transformed_rows.append({
-                                'Year': year,
-                                'Trial': f"{year}_whw_de_prt_lsv",
-                                'Trait': trait_str,
-                                'Variety': variety,
-                                'Location': trial_name,
-                                'Treatment': 'St 2',
-                                'RelativeValue': None,
-                                'AbsoluteValue': value,
-                                'Source': source
-                            })
-                            logger.info(f"Added data point: Variety={variety}, Location={trial_name}, Treatment=St 2, Value={value}")
+                        logger.info(f"Added data point: Variety={variety}, Location={trial_name}, Treatment={treatment}, Value={value}")
 
         return transformed_rows
 

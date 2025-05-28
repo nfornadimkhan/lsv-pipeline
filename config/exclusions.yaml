@@ -17,3 +17,6 @@ exclude_rows:
   - endswith: Latitude XL
   - endswith: WDurum
   - startswith: Differenz
+  - startswith: GD(LSD)
+  - startswith: VD
+  - startswith: Sorte

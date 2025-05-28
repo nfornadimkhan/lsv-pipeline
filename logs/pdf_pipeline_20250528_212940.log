@@ -1,0 +1,258 @@
+2025-05-28 21:29:40,751 - pdf_pipeline - INFO - Starting new logging session. Log file: logs/pdf_pipeline_20250528_212940.log
+2025-05-28 21:29:40,753 - pdf_pipeline - INFO - [cyan]Starting PDF processing pipeline with configuration:[/cyan]
+2025-05-28 21:29:40,753 - pdf_pipeline - INFO - [cyan]Input directory:[/cyan] /Users/neon/Desktop/pdf-to-data/input
+2025-05-28 21:29:40,754 - pdf_pipeline - INFO - [cyan]Output directory:[/cyan] /Users/neon/Desktop/pdf-to-data/output
+2025-05-28 21:29:40,754 - pdf_pipeline - INFO - [cyan]Structure config:[/cyan] /Users/neon/Desktop/pdf-to-data/config/structure.yaml
+2025-05-28 21:29:40,754 - pdf_pipeline - INFO - [cyan]Exclusions config:[/cyan] /Users/neon/Desktop/pdf-to-data/config/exclusions.yaml
+2025-05-28 21:29:40,755 - pdf_pipeline - INFO - Loaded configuration from /Users/neon/Desktop/pdf-to-data/config/structure.yaml
+2025-05-28 21:29:40,757 - pdf_pipeline - INFO - Loaded configuration from /Users/neon/Desktop/pdf-to-data/config/exclusions.yaml
+2025-05-28 21:29:40,757 - pdf_pipeline - DEBUG - [cyan]Initializing PDFProcessor[/cyan]
+2025-05-28 21:29:40,757 - pdf_pipeline - INFO - [cyan]Initializing DataTransformer[/cyan]
+2025-05-28 21:29:40,758 - pdf_pipeline - DEBUG - [green]Loaded exclude_columns patterns:[/green] [{'type': 'contains', 'value': 'Mittelwert'}, {'type': 'contains', 'value': 'Alle'}, {'type': 'startswith', 'value': 'Ertrag'}, {'type': 'startswith', 'value': 'Differen'}]
+2025-05-28 21:29:40,759 - pdf_pipeline - DEBUG - [green]Loaded exclude_rows patterns:[/green] [{'type': 'startswith', 'value': 'rel'}, {'type': 'startswith', 'value': 'vgl reduziert'}, {'type': 'startswith', 'value': 'Alle'}, {'type': 'endswith', 'value': 'alle'}, {'type': 'endswith', 'value': 'Latitude XL'}, {'type': 'endswith', 'value': 'WDurum'}, {'type': 'startswith', 'value': 'Differenz'}, {'type': 'startswith', 'value': 'GD(LSD)'}, {'type': 'startswith', 'value': 'VD'}, {'type': 'startswith', 'value': 'Sorte'}]
+2025-05-28 21:29:40,760 - pdf_pipeline - INFO - [cyan]Found 3 PDF files to process[/cyan]
+2025-05-28 21:29:40,761 - pdf_pipeline - INFO - [cyan]Processing PDF: /Users/neon/Desktop/pdf-to-data/input/winterweizen-sv-2023.pdf[/cyan]
+2025-05-28 21:29:40,772 - pdf_pipeline - INFO - [cyan]Found 0 configured pages to process[/cyan]
+2025-05-28 21:29:40,772 - pdf_pipeline - INFO - [cyan]No pages configured, processing all pages[/cyan]
+2025-05-28 21:29:40,828 - pdf_pipeline - DEBUG - [green]Page 1: Extracted 2 raw tables structures[/green]
+2025-05-28 21:29:40,829 - pdf_pipeline - WARNING - Page 1, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:40,829 - pdf_pipeline - WARNING - Page 1, Raw Table 1: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:41,015 - pdf_pipeline - DEBUG - [green]Page 2: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:41,016 - pdf_pipeline - WARNING - Page 2, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:41,203 - pdf_pipeline - DEBUG - [green]Page 3: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:41,204 - pdf_pipeline - WARNING - Page 3, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:41,427 - pdf_pipeline - DEBUG - [green]Page 4: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:41,428 - pdf_pipeline - WARNING - Page 4, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:41,599 - pdf_pipeline - DEBUG - [green]Page 5: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:41,600 - pdf_pipeline - WARNING - Page 5, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:41,740 - pdf_pipeline - DEBUG - [green]Page 6: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:41,740 - pdf_pipeline - WARNING - Page 6, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:41,770 - pdf_pipeline - DEBUG - [green]Page 7: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:41,771 - pdf_pipeline - WARNING - Page 7, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:41,956 - pdf_pipeline - DEBUG - [green]Page 8: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:41,957 - pdf_pipeline - WARNING - Page 8, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:42,120 - pdf_pipeline - DEBUG - [green]Page 9: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:42,121 - pdf_pipeline - WARNING - Page 9, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:42,249 - pdf_pipeline - DEBUG - [green]Page 10: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:42,250 - pdf_pipeline - WARNING - Page 10, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:42,282 - pdf_pipeline - DEBUG - [green]Page 11: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:42,283 - pdf_pipeline - WARNING - Page 11, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:42,369 - pdf_pipeline - DEBUG - [green]Page 12: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:42,370 - pdf_pipeline - WARNING - Page 12, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:42,400 - pdf_pipeline - DEBUG - [green]Page 13: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:42,400 - pdf_pipeline - WARNING - Page 13, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:42,437 - pdf_pipeline - DEBUG - [green]Page 14: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:42,438 - pdf_pipeline - WARNING - Page 14, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:42,442 - pdf_pipeline - DEBUG - [green]Page 15: Extracted 0 raw tables structures[/green]
+2025-05-28 21:29:42,448 - pdf_pipeline - DEBUG - [green]Page 16: Extracted 0 raw tables structures[/green]
+2025-05-28 21:29:42,448 - pdf_pipeline - INFO - [green]Extracted 0 tables for further transformation from winterweizen-sv-2023.pdf[/green]
+2025-05-28 21:29:42,449 - pdf_pipeline - WARNING - [yellow]No tables extracted from winterweizen-sv-2023.pdf[/yellow]
+2025-05-28 21:29:42,450 - pdf_pipeline - INFO - [cyan]Processing PDF: /Users/neon/Desktop/pdf-to-data/input/Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf[/cyan]
+2025-05-28 21:29:42,455 - pdf_pipeline - INFO - [cyan]Found 1 configured pages to process[/cyan]
+2025-05-28 21:29:42,610 - pdf_pipeline - DEBUG - [green]Page 29: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:42,611 - pdf_pipeline - DEBUG - Page 29, Raw Table 0: Identified as relevant 'absolute' table. Added for transformation.
+2025-05-28 21:29:42,612 - pdf_pipeline - INFO - [green]Extracted 1 tables for further transformation from Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf[/green]
+2025-05-28 21:29:42,613 - pdf_pipeline - INFO - [cyan]Processing table 1[/cyan]
+2025-05-28 21:29:42,613 - pdf_pipeline - INFO - Table type: absolute, Year: 2023
+2025-05-28 21:29:42,613 - pdf_pipeline - INFO - Transforming absolute table with 30 rows
+2025-05-28 21:29:42,614 - pdf_pipeline - INFO - Processing table with single treatment
+2025-05-28 21:29:42,615 - pdf_pipeline - INFO - Found trial name: BIT / Brecht (from: BIT / Brecht) at column 2
+2025-05-28 21:29:42,615 - pdf_pipeline - INFO - Found trial name: MT / Nomborn (from: MT / Nomborn) at column 4
+2025-05-28 21:29:42,615 - pdf_pipeline - INFO - Found trial name: MÜ / Biedesheim (from: MÜ / Biedesheim) at column 6
+2025-05-28 21:29:42,616 - pdf_pipeline - INFO - Found trial name: NW / Herx- heim (from: NW / Herx- heim) at column 8
+2025-05-28 21:29:42,616 - pdf_pipeline - DEBUG - Excluding column 10: Location KH / Wallertheim is in exclusion list
+2025-05-28 21:29:42,617 - pdf_pipeline - INFO - Found trial name: SIM / Kümbdchen (from: SIM / Kümbdchen) at column 12
+2025-05-28 21:29:42,617 - pdf_pipeline - DEBUG - Excluding column 14: Location Mittelwert is in exclusion list
+2025-05-28 21:29:42,617 - pdf_pipeline - INFO - Extracted trial names: ['BIT / Brecht', 'MT / Nomborn', 'MÜ / Biedesheim', 'NW / Herx- heim', 'SIM / Kümbdchen']
+2025-05-28 21:29:42,618 - pdf_pipeline - INFO - Excluded columns: [10, 14]
+2025-05-28 21:29:42,618 - pdf_pipeline - DEBUG - Skipping variety: Sorte (excluded or mean value)
+2025-05-28 21:29:42,619 - pdf_pipeline - INFO - Processing variety: Debian at row 1
+2025-05-28 21:29:42,619 - pdf_pipeline - INFO - Added data point: Variety=Debian, Location=BIT / Brecht, Treatment=both, Value=75.7
+2025-05-28 21:29:42,619 - pdf_pipeline - INFO - Added data point: Variety=Debian, Location=MT / Nomborn, Treatment=both, Value=107.8
+2025-05-28 21:29:42,620 - pdf_pipeline - INFO - Added data point: Variety=Debian, Location=MÜ / Biedesheim, Treatment=both, Value=91.6
+2025-05-28 21:29:42,620 - pdf_pipeline - INFO - Added data point: Variety=Debian, Location=NW / Herx- heim, Treatment=both, Value=103.4
+2025-05-28 21:29:42,621 - pdf_pipeline - INFO - Added data point: Variety=Debian, Location=SIM / Kümbdchen, Treatment=both, Value=80.6
+2025-05-28 21:29:42,621 - pdf_pipeline - INFO - Processing variety: KWS Mintum at row 2
+2025-05-28 21:29:42,622 - pdf_pipeline - INFO - Added data point: Variety=KWS Mintum, Location=BIT / Brecht, Treatment=both, Value=75.2
+2025-05-28 21:29:42,622 - pdf_pipeline - INFO - Added data point: Variety=KWS Mintum, Location=MT / Nomborn, Treatment=both, Value=104.1
+2025-05-28 21:29:42,624 - pdf_pipeline - INFO - Added data point: Variety=KWS Mintum, Location=MÜ / Biedesheim, Treatment=both, Value=86.2
+2025-05-28 21:29:42,624 - pdf_pipeline - INFO - Added data point: Variety=KWS Mintum, Location=NW / Herx- heim, Treatment=both, Value=98.4
+2025-05-28 21:29:42,625 - pdf_pipeline - INFO - Added data point: Variety=KWS Mintum, Location=SIM / Kümbdchen, Treatment=both, Value=85.8
+2025-05-28 21:29:42,625 - pdf_pipeline - INFO - Processing variety: KWS Keitum at row 3
+2025-05-28 21:29:42,626 - pdf_pipeline - INFO - Added data point: Variety=KWS Keitum, Location=BIT / Brecht, Treatment=both, Value=73.8
+2025-05-28 21:29:42,626 - pdf_pipeline - INFO - Added data point: Variety=KWS Keitum, Location=MT / Nomborn, Treatment=both, Value=93.7
+2025-05-28 21:29:42,627 - pdf_pipeline - INFO - Added data point: Variety=KWS Keitum, Location=MÜ / Biedesheim, Treatment=both, Value=84.7
+2025-05-28 21:29:42,627 - pdf_pipeline - INFO - Added data point: Variety=KWS Keitum, Location=NW / Herx- heim, Treatment=both, Value=95.7
+2025-05-28 21:29:42,628 - pdf_pipeline - INFO - Added data point: Variety=KWS Keitum, Location=SIM / Kümbdchen, Treatment=both, Value=91.9
+2025-05-28 21:29:42,628 - pdf_pipeline - INFO - Processing variety: KWS Imperium at row 4
+2025-05-28 21:29:42,629 - pdf_pipeline - INFO - Added data point: Variety=KWS Imperium, Location=BIT / Brecht, Treatment=both, Value=77.1
+2025-05-28 21:29:42,629 - pdf_pipeline - INFO - Added data point: Variety=KWS Imperium, Location=MT / Nomborn, Treatment=both, Value=99.5
+2025-05-28 21:29:42,630 - pdf_pipeline - INFO - Added data point: Variety=KWS Imperium, Location=MÜ / Biedesheim, Treatment=both, Value=86.4
+2025-05-28 21:29:42,631 - pdf_pipeline - INFO - Added data point: Variety=KWS Imperium, Location=NW / Herx- heim, Treatment=both, Value=96.5
+2025-05-28 21:29:42,631 - pdf_pipeline - INFO - Added data point: Variety=KWS Imperium, Location=SIM / Kümbdchen, Treatment=both, Value=83.5
+2025-05-28 21:29:42,632 - pdf_pipeline - INFO - Processing variety: Chevignon (EU) at row 5
+2025-05-28 21:29:42,632 - pdf_pipeline - INFO - Added data point: Variety=Chevignon (EU), Location=BIT / Brecht, Treatment=both, Value=79.0
+2025-05-28 21:29:42,632 - pdf_pipeline - INFO - Added data point: Variety=Chevignon (EU), Location=MT / Nomborn, Treatment=both, Value=101.3
+2025-05-28 21:29:42,633 - pdf_pipeline - INFO - Added data point: Variety=Chevignon (EU), Location=MÜ / Biedesheim, Treatment=both, Value=83.6
+2025-05-28 21:29:42,634 - pdf_pipeline - INFO - Added data point: Variety=Chevignon (EU), Location=NW / Herx- heim, Treatment=both, Value=98.8
+2025-05-28 21:29:42,634 - pdf_pipeline - INFO - Added data point: Variety=Chevignon (EU), Location=SIM / Kümbdchen, Treatment=both, Value=83.2
+2025-05-28 21:29:42,635 - pdf_pipeline - INFO - Processing variety: Revolver at row 6
+2025-05-28 21:29:42,635 - pdf_pipeline - INFO - Added data point: Variety=Revolver, Location=BIT / Brecht, Treatment=both, Value=70.1
+2025-05-28 21:29:42,636 - pdf_pipeline - INFO - Added data point: Variety=Revolver, Location=MT / Nomborn, Treatment=both, Value=100.8
+2025-05-28 21:29:42,636 - pdf_pipeline - INFO - Added data point: Variety=Revolver, Location=MÜ / Biedesheim, Treatment=both, Value=87.8
+2025-05-28 21:29:42,637 - pdf_pipeline - INFO - Added data point: Variety=Revolver, Location=NW / Herx- heim, Treatment=both, Value=99.1
+2025-05-28 21:29:42,637 - pdf_pipeline - INFO - Added data point: Variety=Revolver, Location=SIM / Kümbdchen, Treatment=both, Value=79.0
+2025-05-28 21:29:42,637 - pdf_pipeline - INFO - Processing variety: Spectral at row 7
+2025-05-28 21:29:42,638 - pdf_pipeline - INFO - Added data point: Variety=Spectral, Location=BIT / Brecht, Treatment=both, Value=72.1
+2025-05-28 21:29:42,638 - pdf_pipeline - INFO - Added data point: Variety=Spectral, Location=MT / Nomborn, Treatment=both, Value=102.6
+2025-05-28 21:29:42,639 - pdf_pipeline - INFO - Added data point: Variety=Spectral, Location=MÜ / Biedesheim, Treatment=both, Value=80.9
+2025-05-28 21:29:42,639 - pdf_pipeline - INFO - Added data point: Variety=Spectral, Location=NW / Herx- heim, Treatment=both, Value=91.6
+2025-05-28 21:29:42,640 - pdf_pipeline - INFO - Added data point: Variety=Spectral, Location=SIM / Kümbdchen, Treatment=both, Value=83.9
+2025-05-28 21:29:42,640 - pdf_pipeline - INFO - Processing variety: Knut at row 8
+2025-05-28 21:29:42,640 - pdf_pipeline - INFO - Added data point: Variety=Knut, Location=BIT / Brecht, Treatment=both, Value=70.5
+2025-05-28 21:29:42,641 - pdf_pipeline - INFO - Added data point: Variety=Knut, Location=MT / Nomborn, Treatment=both, Value=102.4
+2025-05-28 21:29:42,641 - pdf_pipeline - INFO - Added data point: Variety=Knut, Location=MÜ / Biedesheim, Treatment=both, Value=80.0
+2025-05-28 21:29:42,642 - pdf_pipeline - INFO - Added data point: Variety=Knut, Location=NW / Herx- heim, Treatment=both, Value=98.9
+2025-05-28 21:29:42,642 - pdf_pipeline - INFO - Added data point: Variety=Knut, Location=SIM / Kümbdchen, Treatment=both, Value=77.5
+2025-05-28 21:29:42,643 - pdf_pipeline - INFO - Processing variety: Hyvega H at row 9
+2025-05-28 21:29:42,643 - pdf_pipeline - INFO - Added data point: Variety=Hyvega H, Location=BIT / Brecht, Treatment=both, Value=76.0
+2025-05-28 21:29:42,643 - pdf_pipeline - INFO - Added data point: Variety=Hyvega H, Location=MT / Nomborn, Treatment=both, Value=99.8
+2025-05-28 21:29:42,644 - pdf_pipeline - INFO - Added data point: Variety=Hyvega H, Location=MÜ / Biedesheim, Treatment=both, Value=82.1
+2025-05-28 21:29:42,644 - pdf_pipeline - INFO - Added data point: Variety=Hyvega H, Location=NW / Herx- heim, Treatment=both, Value=88.4
+2025-05-28 21:29:42,645 - pdf_pipeline - INFO - Added data point: Variety=Hyvega H, Location=SIM / Kümbdchen, Treatment=both, Value=83.5
+2025-05-28 21:29:42,645 - pdf_pipeline - INFO - Processing variety: Attribut at row 10
+2025-05-28 21:29:42,646 - pdf_pipeline - INFO - Added data point: Variety=Attribut, Location=BIT / Brecht, Treatment=both, Value=72.3
+2025-05-28 21:29:42,646 - pdf_pipeline - INFO - Added data point: Variety=Attribut, Location=MT / Nomborn, Treatment=both, Value=101.3
+2025-05-28 21:29:42,647 - pdf_pipeline - INFO - Added data point: Variety=Attribut, Location=MÜ / Biedesheim, Treatment=both, Value=83.2
+2025-05-28 21:29:42,647 - pdf_pipeline - INFO - Added data point: Variety=Attribut, Location=NW / Herx- heim, Treatment=both, Value=93.1
+2025-05-28 21:29:42,648 - pdf_pipeline - INFO - Added data point: Variety=Attribut, Location=SIM / Kümbdchen, Treatment=both, Value=81.0
+2025-05-28 21:29:42,648 - pdf_pipeline - INFO - Processing variety: Polarkap at row 11
+2025-05-28 21:29:42,648 - pdf_pipeline - INFO - Added data point: Variety=Polarkap, Location=BIT / Brecht, Treatment=both, Value=74.3
+2025-05-28 21:29:42,649 - pdf_pipeline - INFO - Added data point: Variety=Polarkap, Location=MT / Nomborn, Treatment=both, Value=99.2
+2025-05-28 21:29:42,649 - pdf_pipeline - INFO - Added data point: Variety=Polarkap, Location=MÜ / Biedesheim, Treatment=both, Value=81.7
+2025-05-28 21:29:42,650 - pdf_pipeline - INFO - Added data point: Variety=Polarkap, Location=NW / Herx- heim, Treatment=both, Value=93.9
+2025-05-28 21:29:42,650 - pdf_pipeline - INFO - Added data point: Variety=Polarkap, Location=SIM / Kümbdchen, Treatment=both, Value=77.3
+2025-05-28 21:29:42,651 - pdf_pipeline - INFO - Processing variety: KWS Emerick at row 12
+2025-05-28 21:29:42,651 - pdf_pipeline - INFO - Added data point: Variety=KWS Emerick, Location=BIT / Brecht, Treatment=both, Value=72.4
+2025-05-28 21:29:42,652 - pdf_pipeline - INFO - Added data point: Variety=KWS Emerick, Location=MT / Nomborn, Treatment=both, Value=92.9
+2025-05-28 21:29:42,652 - pdf_pipeline - INFO - Added data point: Variety=KWS Emerick, Location=MÜ / Biedesheim, Treatment=both, Value=77.9
+2025-05-28 21:29:42,653 - pdf_pipeline - INFO - Added data point: Variety=KWS Emerick, Location=NW / Herx- heim, Treatment=both, Value=94.9
+2025-05-28 21:29:42,654 - pdf_pipeline - INFO - Added data point: Variety=KWS Emerick, Location=SIM / Kümbdchen, Treatment=both, Value=79.9
+2025-05-28 21:29:42,654 - pdf_pipeline - INFO - Processing variety: SU Jonte at row 13
+2025-05-28 21:29:42,655 - pdf_pipeline - INFO - Added data point: Variety=SU Jonte, Location=BIT / Brecht, Treatment=both, Value=71.8
+2025-05-28 21:29:42,655 - pdf_pipeline - INFO - Added data point: Variety=SU Jonte, Location=MT / Nomborn, Treatment=both, Value=95.7
+2025-05-28 21:29:42,656 - pdf_pipeline - INFO - Added data point: Variety=SU Jonte, Location=MÜ / Biedesheim, Treatment=both, Value=82.1
+2025-05-28 21:29:42,656 - pdf_pipeline - INFO - Added data point: Variety=SU Jonte, Location=NW / Herx- heim, Treatment=both, Value=95.1
+2025-05-28 21:29:42,657 - pdf_pipeline - INFO - Added data point: Variety=SU Jonte, Location=SIM / Kümbdchen, Treatment=both, Value=73.9
+2025-05-28 21:29:42,657 - pdf_pipeline - INFO - Processing variety: Exsal at row 14
+2025-05-28 21:29:42,657 - pdf_pipeline - INFO - Added data point: Variety=Exsal, Location=BIT / Brecht, Treatment=both, Value=74.3
+2025-05-28 21:29:42,658 - pdf_pipeline - INFO - Added data point: Variety=Exsal, Location=MT / Nomborn, Treatment=both, Value=90.4
+2025-05-28 21:29:42,658 - pdf_pipeline - INFO - Added data point: Variety=Exsal, Location=MÜ / Biedesheim, Treatment=both, Value=80.6
+2025-05-28 21:29:42,659 - pdf_pipeline - INFO - Added data point: Variety=Exsal, Location=NW / Herx- heim, Treatment=both, Value=92.6
+2025-05-28 21:29:42,659 - pdf_pipeline - INFO - Added data point: Variety=Exsal, Location=SIM / Kümbdchen, Treatment=both, Value=72.3
+2025-05-28 21:29:42,660 - pdf_pipeline - INFO - Processing variety: Asory at row 15
+2025-05-28 21:29:42,660 - pdf_pipeline - INFO - Added data point: Variety=Asory, Location=BIT / Brecht, Treatment=both, Value=77.0
+2025-05-28 21:29:42,661 - pdf_pipeline - INFO - Added data point: Variety=Asory, Location=MT / Nomborn, Treatment=both, Value=90.9
+2025-05-28 21:29:42,661 - pdf_pipeline - INFO - Added data point: Variety=Asory, Location=MÜ / Biedesheim, Treatment=both, Value=75.2
+2025-05-28 21:29:42,662 - pdf_pipeline - INFO - Added data point: Variety=Asory, Location=NW / Herx- heim, Treatment=both, Value=93.7
+2025-05-28 21:29:42,662 - pdf_pipeline - INFO - Added data point: Variety=Asory, Location=SIM / Kümbdchen, Treatment=both, Value=75.1
+2025-05-28 21:29:42,663 - pdf_pipeline - INFO - Processing variety: Absint at row 16
+2025-05-28 21:29:42,663 - pdf_pipeline - INFO - Added data point: Variety=Absint, Location=BIT / Brecht, Treatment=both, Value=66.8
+2025-05-28 21:29:42,664 - pdf_pipeline - INFO - Added data point: Variety=Absint, Location=MT / Nomborn, Treatment=both, Value=90.6
+2025-05-28 21:29:42,664 - pdf_pipeline - INFO - Added data point: Variety=Absint, Location=MÜ / Biedesheim, Treatment=both, Value=78.6
+2025-05-28 21:29:42,665 - pdf_pipeline - INFO - Added data point: Variety=Absint, Location=NW / Herx- heim, Treatment=both, Value=95.1
+2025-05-28 21:29:42,665 - pdf_pipeline - INFO - Added data point: Variety=Absint, Location=SIM / Kümbdchen, Treatment=both, Value=79.8
+2025-05-28 21:29:42,666 - pdf_pipeline - INFO - Processing variety: Cayenne at row 17
+2025-05-28 21:29:42,666 - pdf_pipeline - INFO - Added data point: Variety=Cayenne, Location=BIT / Brecht, Treatment=both, Value=75.5
+2025-05-28 21:29:42,667 - pdf_pipeline - INFO - Added data point: Variety=Cayenne, Location=MT / Nomborn, Treatment=both, Value=96.3
+2025-05-28 21:29:42,667 - pdf_pipeline - INFO - Added data point: Variety=Cayenne, Location=MÜ / Biedesheim, Treatment=both, Value=78.6
+2025-05-28 21:29:42,668 - pdf_pipeline - INFO - Added data point: Variety=Cayenne, Location=NW / Herx- heim, Treatment=both, Value=84.9
+2025-05-28 21:29:42,668 - pdf_pipeline - INFO - Added data point: Variety=Cayenne, Location=SIM / Kümbdchen, Treatment=both, Value=76.6
+2025-05-28 21:29:42,669 - pdf_pipeline - INFO - Processing variety: SU Willem at row 18
+2025-05-28 21:29:42,669 - pdf_pipeline - INFO - Added data point: Variety=SU Willem, Location=BIT / Brecht, Treatment=both, Value=75.9
+2025-05-28 21:29:42,669 - pdf_pipeline - INFO - Added data point: Variety=SU Willem, Location=MT / Nomborn, Treatment=both, Value=96.5
+2025-05-28 21:29:42,670 - pdf_pipeline - INFO - Added data point: Variety=SU Willem, Location=MÜ / Biedesheim, Treatment=both, Value=75.6
+2025-05-28 21:29:42,670 - pdf_pipeline - INFO - Added data point: Variety=SU Willem, Location=NW / Herx- heim, Treatment=both, Value=82.1
+2025-05-28 21:29:42,671 - pdf_pipeline - INFO - Added data point: Variety=SU Willem, Location=SIM / Kümbdchen, Treatment=both, Value=81.0
+2025-05-28 21:29:42,671 - pdf_pipeline - INFO - Processing variety: RGT Reform at row 19
+2025-05-28 21:29:42,671 - pdf_pipeline - INFO - Added data point: Variety=RGT Reform, Location=BIT / Brecht, Treatment=both, Value=70.0
+2025-05-28 21:29:42,672 - pdf_pipeline - INFO - Added data point: Variety=RGT Reform, Location=MT / Nomborn, Treatment=both, Value=92.1
+2025-05-28 21:29:42,672 - pdf_pipeline - INFO - Added data point: Variety=RGT Reform, Location=MÜ / Biedesheim, Treatment=both, Value=79.0
+2025-05-28 21:29:42,673 - pdf_pipeline - INFO - Added data point: Variety=RGT Reform, Location=NW / Herx- heim, Treatment=both, Value=90.7
+2025-05-28 21:29:42,674 - pdf_pipeline - INFO - Added data point: Variety=RGT Reform, Location=SIM / Kümbdchen, Treatment=both, Value=75.6
+2025-05-28 21:29:42,675 - pdf_pipeline - INFO - Processing variety: Akzent at row 20
+2025-05-28 21:29:42,675 - pdf_pipeline - INFO - Added data point: Variety=Akzent, Location=BIT / Brecht, Treatment=both, Value=73.8
+2025-05-28 21:29:42,675 - pdf_pipeline - INFO - Added data point: Variety=Akzent, Location=MT / Nomborn, Treatment=both, Value=88.4
+2025-05-28 21:29:42,676 - pdf_pipeline - INFO - Added data point: Variety=Akzent, Location=MÜ / Biedesheim, Treatment=both, Value=75.4
+2025-05-28 21:29:42,676 - pdf_pipeline - INFO - Added data point: Variety=Akzent, Location=NW / Herx- heim, Treatment=both, Value=87.6
+2025-05-28 21:29:42,677 - pdf_pipeline - INFO - Added data point: Variety=Akzent, Location=SIM / Kümbdchen, Treatment=both, Value=77.7
+2025-05-28 21:29:42,677 - pdf_pipeline - INFO - Processing variety: KWS Mitchum at row 21
+2025-05-28 21:29:42,678 - pdf_pipeline - INFO - Added data point: Variety=KWS Mitchum, Location=BIT / Brecht, Treatment=both, Value=66.6
+2025-05-28 21:29:42,679 - pdf_pipeline - INFO - Added data point: Variety=KWS Mitchum, Location=MT / Nomborn, Treatment=both, Value=89.2
+2025-05-28 21:29:42,679 - pdf_pipeline - INFO - Added data point: Variety=KWS Mitchum, Location=MÜ / Biedesheim, Treatment=both, Value=72.0
+2025-05-28 21:29:42,680 - pdf_pipeline - INFO - Added data point: Variety=KWS Mitchum, Location=NW / Herx- heim, Treatment=both, Value=91.9
+2025-05-28 21:29:42,680 - pdf_pipeline - INFO - Added data point: Variety=KWS Mitchum, Location=SIM / Kümbdchen, Treatment=both, Value=76.6
+2025-05-28 21:29:42,681 - pdf_pipeline - INFO - Processing variety: Foxx g at row 22
+2025-05-28 21:29:42,681 - pdf_pipeline - INFO - Added data point: Variety=Foxx g, Location=BIT / Brecht, Treatment=both, Value=69.9
+2025-05-28 21:29:42,681 - pdf_pipeline - INFO - Added data point: Variety=Foxx g, Location=MT / Nomborn, Treatment=both, Value=92.0
+2025-05-28 21:29:42,682 - pdf_pipeline - INFO - Added data point: Variety=Foxx g, Location=MÜ / Biedesheim, Treatment=both, Value=73.7
+2025-05-28 21:29:42,683 - pdf_pipeline - INFO - Added data point: Variety=Foxx g, Location=NW / Herx- heim, Treatment=both, Value=84.6
+2025-05-28 21:29:42,683 - pdf_pipeline - INFO - Added data point: Variety=Foxx g, Location=SIM / Kümbdchen, Treatment=both, Value=78.4
+2025-05-28 21:29:42,684 - pdf_pipeline - INFO - Processing variety: Absolut at row 23
+2025-05-28 21:29:42,684 - pdf_pipeline - INFO - Added data point: Variety=Absolut, Location=BIT / Brecht, Treatment=both, Value=59.6
+2025-05-28 21:29:42,684 - pdf_pipeline - INFO - Added data point: Variety=Absolut, Location=MT / Nomborn, Treatment=both, Value=85.7
+2025-05-28 21:29:42,685 - pdf_pipeline - INFO - Added data point: Variety=Absolut, Location=MÜ / Biedesheim, Treatment=both, Value=70.4
+2025-05-28 21:29:42,685 - pdf_pipeline - INFO - Added data point: Variety=Absolut, Location=NW / Herx- heim, Treatment=both, Value=97.6
+2025-05-28 21:29:42,686 - pdf_pipeline - INFO - Added data point: Variety=Absolut, Location=SIM / Kümbdchen, Treatment=both, Value=68.4
+2025-05-28 21:29:42,686 - pdf_pipeline - INFO - Processing variety: Informer at row 24
+2025-05-28 21:29:42,687 - pdf_pipeline - INFO - Added data point: Variety=Informer, Location=BIT / Brecht, Treatment=both, Value=70.7
+2025-05-28 21:29:42,687 - pdf_pipeline - INFO - Added data point: Variety=Informer, Location=MT / Nomborn, Treatment=both, Value=92.3
+2025-05-28 21:29:42,687 - pdf_pipeline - INFO - Added data point: Variety=Informer, Location=MÜ / Biedesheim, Treatment=both, Value=70.2
+2025-05-28 21:29:42,688 - pdf_pipeline - INFO - Added data point: Variety=Informer, Location=NW / Herx- heim, Treatment=both, Value=80.4
+2025-05-28 21:29:42,688 - pdf_pipeline - INFO - Added data point: Variety=Informer, Location=SIM / Kümbdchen, Treatment=both, Value=74.2
+2025-05-28 21:29:42,689 - pdf_pipeline - INFO - Processing variety: Akasha at row 25
+2025-05-28 21:29:42,689 - pdf_pipeline - INFO - Added data point: Variety=Akasha, Location=BIT / Brecht, Treatment=both, Value=66.3
+2025-05-28 21:29:42,690 - pdf_pipeline - INFO - Added data point: Variety=Akasha, Location=MT / Nomborn, Treatment=both, Value=84.9
+2025-05-28 21:29:42,690 - pdf_pipeline - INFO - Added data point: Variety=Akasha, Location=MÜ / Biedesheim, Treatment=both, Value=76.7
+2025-05-28 21:29:42,690 - pdf_pipeline - INFO - Added data point: Variety=Akasha, Location=NW / Herx- heim, Treatment=both, Value=84.3
+2025-05-28 21:29:42,691 - pdf_pipeline - INFO - Added data point: Variety=Akasha, Location=SIM / Kümbdchen, Treatment=both, Value=74.1
+2025-05-28 21:29:42,692 - pdf_pipeline - INFO - Processing variety: KWS Donovan at row 26
+2025-05-28 21:29:42,692 - pdf_pipeline - INFO - Added data point: Variety=KWS Donovan, Location=BIT / Brecht, Treatment=both, Value=66.0
+2025-05-28 21:29:42,692 - pdf_pipeline - INFO - Added data point: Variety=KWS Donovan, Location=MT / Nomborn, Treatment=both, Value=73.2
+2025-05-28 21:29:42,693 - pdf_pipeline - INFO - Added data point: Variety=KWS Donovan, Location=MÜ / Biedesheim, Treatment=both, Value=66.1
+2025-05-28 21:29:42,693 - pdf_pipeline - INFO - Added data point: Variety=KWS Donovan, Location=NW / Herx- heim, Treatment=both, Value=60.8
+2025-05-28 21:29:42,694 - pdf_pipeline - INFO - Added data point: Variety=KWS Donovan, Location=SIM / Kümbdchen, Treatment=both, Value=78.8
+2025-05-28 21:29:42,694 - pdf_pipeline - DEBUG - Skipping row 27: Contains mean value
+2025-05-28 21:29:42,695 - pdf_pipeline - DEBUG - Skipping variety: GD(LSD) (excluded or mean value)
+2025-05-28 21:29:42,695 - pdf_pipeline - DEBUG - Skipping variety: VD (excluded or mean value)
+2025-05-28 21:29:42,695 - pdf_pipeline - INFO - Transformed 130 rows from table 1
+2025-05-28 21:29:42,699 - pdf_pipeline - INFO - Final DataFrame shape: (130, 9)
+2025-05-28 21:29:42,699 - pdf_pipeline - INFO - Columns: ['Year', 'Trial', 'Trait', 'Variety', 'Location', 'Treatment', 'RelativeValue', 'AbsoluteValue', 'Source']
+2025-05-28 21:29:42,707 - pdf_pipeline - INFO - Sample data:
+   Year                Trial Trait  ... RelativeValue AbsoluteValue                                             Source
+0  2023  2023_whw_de_prt_lsv   gdy  ...          None          75.7  Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf
+1  2023  2023_whw_de_prt_lsv   gdy  ...          None         107.8  Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf
+2  2023  2023_whw_de_prt_lsv   gdy  ...          None          91.6  Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf
+3  2023  2023_whw_de_prt_lsv   gdy  ...          None         103.4  Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf
+4  2023  2023_whw_de_prt_lsv   gdy  ...          None          80.6  Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf
+
+[5 rows x 9 columns]
+2025-05-28 21:29:42,734 - pdf_pipeline - INFO - [green]Successfully processed Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf -> /Users/neon/Desktop/pdf-to-data/output/2023_ww_de_prt_lsv.xlsx[/green]
+2025-05-28 21:29:42,735 - pdf_pipeline - INFO - [cyan]Processing PDF: /Users/neon/Desktop/pdf-to-data/input/winterweizen-LLG sachsen-anhalt.pdf[/cyan]
+2025-05-28 21:29:42,736 - pdf_pipeline - INFO - [cyan]Found 0 configured pages to process[/cyan]
+2025-05-28 21:29:42,737 - pdf_pipeline - INFO - [cyan]No pages configured, processing all pages[/cyan]
+2025-05-28 21:29:42,813 - pdf_pipeline - DEBUG - [green]Page 1: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:42,814 - pdf_pipeline - WARNING - Page 1, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:42,979 - pdf_pipeline - DEBUG - [green]Page 2: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:42,979 - pdf_pipeline - WARNING - Page 2, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:43,049 - pdf_pipeline - DEBUG - [green]Page 3: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:43,051 - pdf_pipeline - WARNING - Page 3, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:43,109 - pdf_pipeline - DEBUG - [green]Page 4: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:43,110 - pdf_pipeline - WARNING - Page 4, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:43,152 - pdf_pipeline - DEBUG - [green]Page 5: Extracted 0 raw tables structures[/green]
+2025-05-28 21:29:43,234 - pdf_pipeline - DEBUG - [green]Page 6: Extracted 1 raw tables structures[/green]
+2025-05-28 21:29:43,235 - pdf_pipeline - WARNING - Page 6, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:29:43,280 - pdf_pipeline - DEBUG - [green]Page 7: Extracted 0 raw tables structures[/green]
+2025-05-28 21:29:43,280 - pdf_pipeline - INFO - [green]Extracted 0 tables for further transformation from winterweizen-LLG sachsen-anhalt.pdf[/green]
+2025-05-28 21:29:43,281 - pdf_pipeline - WARNING - [yellow]No tables extracted from winterweizen-LLG sachsen-anhalt.pdf[/yellow]
+2025-05-28 21:29:43,282 - pdf_pipeline - INFO - [green]PDF processing completed successfully![/green]
