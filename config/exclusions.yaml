@@ -6,8 +6,12 @@
 exclude_columns:
   - contains: Mittelwert
   - contains: Alle
+  - startswith: Ertrag
+
 exclude_rows:
-  - startswith: rel. 100
+  - startswith: rel
+  - startswith: vgl reduziert
   - startswith: Alle
   - endswith: alle
-  - contains: WDurum
+  - endswith: Latitude XL
+  - endswith: WDurum

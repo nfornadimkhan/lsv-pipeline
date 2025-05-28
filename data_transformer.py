@@ -24,8 +24,37 @@ class DataTransformer:
         self.exclude_columns = config_manager.get_exclude_columns() if config_manager else []
         self.exclude_rows = config_manager.get_exclude_rows() if config_manager else []
         logger.info("[cyan]Initializing DataTransformer[/cyan]")
+        logger.debug(f"[green]Loaded exclude_columns patterns:[/green] {self.exclude_columns}")
         logger.debug(f"[green]Loaded exclude_rows patterns:[/green] {self.exclude_rows}")
         
+    def _matches_exclusion_pattern(self, text: str, patterns: List[Dict[str, str]]) -> bool:
+        """
+        Check if text matches any exclusion pattern.
+        
+        Args:
+            text: Text to check
+            patterns: List of pattern dictionaries with 'type' and 'value' keys
+            
+        Returns:
+            bool: True if text matches any pattern, False otherwise
+        """
+        if not text or not patterns:
+            return False
+            
+        text = str(text).strip()
+        for pattern in patterns:
+            pattern_type = pattern.get('type')
+            pattern_value = pattern.get('value')
+            
+            if pattern_type == 'startswith' and text.lower().startswith(pattern_value.lower()):
+                return True
+            elif pattern_type == 'endswith' and text.lower().endswith(pattern_value.lower()):
+                return True
+            elif pattern_type == 'contains' and pattern_value.lower() in text.lower():
+                return True
+                
+        return False
+
     def _normalize_german_text(self, text: str) -> str:
         """
         Normalize German text by handling special characters and common replacements.
@@ -54,7 +83,7 @@ class DataTransformer:
     def _reconstruct_vertical_text(self, text: str) -> str:
         """
         Reconstruct vertical text into proper location name.
-        Example: 'r )\nui h\n-B nic\nn e\ne v\np r\nr ö\ne N\nK (' -> 'Köln-Bonn'
+        Example: 'r )\nui h\n-B nic\nn e\ne v\np r\nr ö\ne N\nK (' -> 'Kerpen-Buir (Nörvenich)'
         """
         if not text:
             return ""
@@ -63,25 +92,25 @@ class DataTransformer:
         # Map of scrambled patterns to actual location names
         vertical_patterns = {
             # Original patterns with newlines
-            'r )\nui h\n-B nic\nn e\ne v\np r\nr ö\ne N\nK (': 'Köln-Bonn',
+            'r )\nui h\n-B nic\nn e\ne v\np r\nr ö\ne N\nK (': 'Kerpen-Buir (Nörvenich)',
             'z- h\nn t\ne a\nel nr\nk e\nr V\nE': 'Erkelenz-Venrath', 
             't\nr\ne\nw\nel\nt\nt\nMi': 'Mittelwert',
             'e\ns .)\ns h\nü g\nD n\ns ti\nu s\na O\nH (': 'Haus Düsse (Oberkassel)',
-            'n\ne- e\ng d\na ei\nL H': 'Hagen-Leidenhausen',
+            'n\ne- e\ng d\na ei\nL H': 'Lage-Heiden',
             'n\ne\nv\ne\nr\nG': 'Greven',
             '-\nn n\nei e\nt g\ns a\nWar All': 'Warstein-Allagen',
             'n\n- e\ng f\nr ö\ne h\nb n\nm e\no st\nBl ol\nH': 'Blomberg-Hohenfels',
             'm *\nz\ne t\nt a\nr s\ne n\nzi ei\nu z\nd t\ne u\nr h\nei sc\nb n\nze\ng\na n\ntr a\nEr Pfl': 'Ertrag bei angepasstem Pflanzenschutz',
             # Patterns after PDF processor cleaning (spaces between characters)
-            'r ) ui h -B nic n e e v p r r ö e N K (': 'Köln-Bonn',
-            'r ) uih -Bnicn ee vp rr öe NK (': 'Köln-Bonn',
+            'r ) ui h -B nic n e e v p r r ö e N K (': 'Kerpen-Buir (Nörvenich)',
+            'r ) uih -Bnicn ee vp rr öe NK (': 'Kerpen-Buir (Nörvenich)',
             'z- h n t e a el nr k e r V E': 'Erkelenz-Venrath',
             'z- hn te aelnrk er VE': 'Erkelenz-Venrath',
             't r e w el t t Mi': 'Mittelwert',
             'e s .) s h ü g D n s ti u s a O H (': 'Haus Düsse (Oberkassel)',
             'es .) sh üg Dn stiu sa OH (': 'Haus Düsse (Oberkassel)',
-            'n e- e g d a ei L H': 'Hagen-Leidenhausen',
-            'ne- eg da eiL H': 'Hagen-Leidenhausen',
+            'n e- e g d a ei L H': 'Lage-Heiden',
+            'ne- eg da eiL H': 'Lage-Heiden',
             'n e v e r G': 'Greven',
             '- n n ei e t g s a War All': 'Warstein-Allagen',
             '- nn eie tg sa WarAll': 'Warstein-Allagen',
@@ -101,11 +130,11 @@ class DataTransformer:
         
         # Known location mappings based on character sequences
         location_mappings = {
-            'r)uih-Bnicneevprr[öo]eNK[(]': 'Köln-Bonn',
+            'r)uih-Bnicneevprr[öo]eNK[(]': 'Kerpen-Buir (Nörvenich)',
             'z-hnte[ae]nrelkr[ne]rVE': 'Erkelenz-Venrath',
             'trewelttMi': 'Mittelwert',
             'es[.)]sh[üu]gDnsti[ou]saOH[(]': 'Haus Düsse (Oberkassel)',
-            'ne-egdaeiLH': 'Hagen-Leidenhausen',
+            'ne-egdaeiLH': 'Lage-Heiden',
             'neverG': 'Greven',
             '-nneietgsaWarAll': 'Warstein-Allagen',
             'n-egfr[öo]ehbnmeostBlolH': 'Blomberg-Hohenfels',
@@ -175,7 +204,7 @@ class DataTransformer:
                     for col_idx in range(2, len(row_data)):
                         if col_idx < len(row_data) and row_data[col_idx]:
                             raw_trial_name = str(row_data[col_idx]).strip()
-                            if raw_trial_name and not any(x in raw_trial_name.lower() for x in ['mittel', 'mw', 'versuch']):
+                            if raw_trial_name and not self._matches_exclusion_pattern(raw_trial_name, self.exclude_columns):
                                 trial_name = self._reconstruct_vertical_text(raw_trial_name)
                                 if trial_name:
                                     trial_names.append(trial_name)
@@ -192,7 +221,7 @@ class DataTransformer:
                 continue
                 
             variety = self._clean_text(row_data[1] if len(row_data) > 1 else row_data[0])
-            if not variety or "Mittel" in variety or variety in self.exclude_rows:
+            if not variety or self._matches_exclusion_pattern(variety, self.exclude_rows):
                 logger.debug(f"Skipping row {row_idx}: {variety} (excluded or mean value)")
                 continue
 
@@ -207,6 +236,11 @@ class DataTransformer:
                 if value is not None:
                     # Get trial name for this column
                     trial_name = trial_names[col_idx - 2] if col_idx - 2 < len(trial_names) else f"Location_{col_idx}"
+                    
+                    # Skip if location is Mittelwert or Ertrag bei angepasstem Pflanzenschutz
+                    if trial_name in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"]:
+                        logger.debug(f"Skipping data point: Location is {trial_name} for variety {variety}")
+                        continue
                     
                     # Calculate absolute value from relative value
                     ref_value = self._clean_value(reference_row_content[col_idx])
@@ -244,8 +278,12 @@ class DataTransformer:
         # Extract trial names from headers
         trial_names = []
         for i, h in enumerate(headers):
-            if h and not any(x in str(h).lower() for x in ['sorte', 'qualität', 'mittel', 'mw']) and str(h).strip() not in self.exclude_columns:
+            if h and not self._matches_exclusion_pattern(h, self.exclude_columns):
                 trial_name = self._reconstruct_vertical_text(str(h))
+                # Skip if location is Mittelwert or Ertrag bei angepasstem Pflanzenschutz
+                if trial_name in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"]:
+                    logger.debug(f"Skipping location: {trial_name} at column {i}")
+                    continue
                 if trial_name:
                     trial_names.append((i, trial_name))
                     logger.info(f"Found trial name: {trial_name} (from: {h}) at column {i}")
@@ -261,7 +299,7 @@ class DataTransformer:
                 continue
                 
             variety = self._normalize_german_text(row[0])
-            if not variety or "Mittel" in variety or variety in self.exclude_rows:
+            if not variety or self._matches_exclusion_pattern(variety, self.exclude_rows):
                 logger.debug(f"Skipping variety: {variety} (excluded or mean value)")
                 continue
 
