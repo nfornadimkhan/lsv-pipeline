@@ -10,3 +10,4 @@ exclude_rows:
   - startswith: rel. 100
   - startswith: Alle
   - endswith: alle
+  - contains: WDurum

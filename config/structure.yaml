@@ -8,6 +8,7 @@ pdfs:
     year: 2023
     pages:
       - number: 2
-        table_type: "kornertrag_relativ"
+        table_type: "relative"
         treatment: "intensive"
         title: "Winterweizen - Kornertrag der Sorten in den LSV NRW 2023 bei angepasstem/intensivem Pflanzenschutz"
+        trait: "gdy"

@@ -127,7 +127,7 @@ def process_pdfs(
                         continue
                         
                     # Save to Excel
-                    output_file = output_dir / f"{year}_data.xlsx"
+                    output_file = output_dir / f"{year}_ww_de_prt_lsv.xlsx"
                     df.to_excel(output_file, index=False)
                     logger.info(f"[green]Successfully processed {pdf_file.name} -> {output_file}[/green]")
                     
