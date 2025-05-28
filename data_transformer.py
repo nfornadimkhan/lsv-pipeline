@@ -288,135 +288,173 @@ class DataTransformer:
                                   source: Optional[str] = None, trait: Optional[str] = None) -> list:
         """Transform absolute table data into standardized format."""
         transformed_rows = []
-        logger.info(f"Transforming absolute table with {len(rows)} rows")
+        logger.info(f"Transforming absolute table. Initial headers: {headers}, Initial rows count: {len(rows)}")
         
-        # Extract trial names from headers
-        trial_names = []
-        excluded_columns = set()  # Keep track of columns to exclude
-        
-        # Determine if this is a "Both" treatment table by checking header patterns
         is_both_treatment = False
-        for h in headers:
-            if h and any(pattern in str(h).lower() for pattern in ['stufe 1', 'st 1', 'stufe 2', 'st 2']):
-                is_both_treatment = True
-                break
-        
-        # If treatment is explicitly "Both" or we detected both treatments in headers
-        if treatment == "Both" or is_both_treatment:
-            logger.info("Processing table with both treatments (Stufe 1 and Stufe 2)")
-            # Process headers to find location pairs
-            i = 0
-            while i < len(headers):
-                if i + 1 < len(headers) and headers[i] and headers[i+1]:
-                    location = self._reconstruct_vertical_text(str(headers[i]))
-                    # Check if this column should be excluded
-                    if (location in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"] or 
-                        "Differenz" in location or 
-                        self._matches_exclusion_pattern(headers[i], self.exclude_columns)):
-                        excluded_columns.add(i)
-                        excluded_columns.add(i+1)  # Also exclude the paired column
-                        logger.debug(f"Excluding columns {i} and {i+1}: Location {location} is in exclusion list")
-                        i += 2
-                        continue
-                        
-                    if location:
-                        trial_names.append((i, i+1, location))  # Store both column indices and location
-                        logger.info(f"Found trial name: {location} (from: {headers[i]}) at columns {i} and {i+1}")
-                i += 2
-        else:
-            logger.info("Processing table with single treatment")
-            # Process headers for single treatment
-            for i, h in enumerate(headers):
-                if h:
-                    location = self._reconstruct_vertical_text(str(h))
-                    # Check if this column should be excluded
-                    if (location in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"] or 
-                        "Differenz" in location or 
-                        self._matches_exclusion_pattern(h, self.exclude_columns)):
-                        excluded_columns.add(i)
-                        logger.debug(f"Excluding column {i}: Location {location} is in exclusion list")
-                        continue
-                        
-                    if location:
-                        trial_names.append((i, location))  # Store column index and location
-                        logger.info(f"Found trial name: {location} (from: {h}) at column {i}")
+        secondary_header_row_used = False
 
-        logger.info(f"Extracted trial names: {[name[-1] for name in trial_names]}")
-        logger.info(f"Excluded columns: {sorted(excluded_columns)}")
+        # 1. Check primary headers (the 'headers' argument)
+        if headers: # Ensure headers list is not empty
+            for h_val in headers:
+                if h_val and any(pattern in str(h_val).lower() for pattern in ['stufe 1', 'st 1', 'stufe 2', 'st 2']):
+                    is_both_treatment = True
+                    logger.info("Detected Stufe 1/2 pattern in primary headers.")
+                    break
         
-        # Use trait from config or default
+        # 2. If not found in primary headers, check the first row of 'rows' data
+        if not is_both_treatment and rows: # Ensure rows list is not empty
+            first_potential_header_row = rows[0]
+            stufe_pattern_count = 0
+            for cell in first_potential_header_row:
+                if cell and any(pattern in str(cell).lower() for pattern in ['stufe 1', 'st 1', 'stufe 2', 'st 2']):
+                    stufe_pattern_count +=1
+            
+            # Heuristic: if multiple Stufe mentions, or if config treatment is 'Both' and we see at least one
+            config_suggests_both = (treatment == "Both")
+            if stufe_pattern_count > 1 or (config_suggests_both and stufe_pattern_count > 0) : 
+                is_both_treatment = True
+                secondary_header_row_used = True
+                logger.info(f"Detected Stufe 1/2 pattern in the first data row (stufe_pattern_count: {stufe_pattern_count}). Treating it as a secondary header.")
+        
+        actual_data_rows = rows
+        if secondary_header_row_used:
+            actual_data_rows = rows[1:] # Data starts from the second row of original 'rows'
+
+        # Log for debugging header interpretation
+        logger.debug(f"For table with source '{source}', primary headers used for locations: {headers}")
+        if secondary_header_row_used and rows:
+             logger.debug(f"Secondary header row (from rows[0]): {rows[0]}")
+        logger.debug(f"Effective data rows for processing: {len(actual_data_rows)}")
+        logger.debug(f"is_both_treatment flag: {is_both_treatment} (secondary_header_row_used: {secondary_header_row_used}), config treatment: {treatment}")
+
+        trial_names = [] # Stores (idx_st1, idx_st2, name) for both, or (idx, name) for single
+        excluded_data_indices = set() 
+
+        if is_both_treatment:
+            logger.info("Extracting trial names for 'both treatments' table structure.")
+            # Based on logged primary headers: ['', None, 'LOC1', None, 'LOC2', None, ...]
+            # LOC1 header at index h_idx corresponds to Stufe 1 data at data column h_idx, and Stufe 2 at data column h_idx + 1.
+            
+            h_idx = 0
+            while h_idx < len(headers):
+                # A location is typically followed by a None or empty string in the primary header for this Stufe 1/2 table structure.
+                # The location name itself (headers[h_idx]) must be non-empty.
+                if headers[h_idx] and (h_idx + 1 < len(headers)): # Check if current header is non-empty AND there's a next column for Stufe 2 placeholder
+                    raw_location_name = str(headers[h_idx])
+                    reconstructed_name = self._reconstruct_vertical_text(raw_location_name)
+
+                    # Filter out common non-location headers like "Sorte" or empty strings after reconstruction.
+                    if reconstructed_name.lower() == "sorte" or not reconstructed_name.strip():
+                        h_idx += 1 # Move to next header cell
+                        continue
+
+                    # Check for exclusion
+                    if (reconstructed_name in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"] or
+                        "Differenz" in reconstructed_name or
+                        self._matches_exclusion_pattern(raw_location_name, self.exclude_columns)):
+                        
+                        excluded_data_indices.add(h_idx)      # Stufe 1 data column index
+                        excluded_data_indices.add(h_idx + 1)  # Stufe 2 data column index
+                        logger.debug(f"Excluding data columns for '{reconstructed_name}' (from '{raw_location_name}' at header index {h_idx}): data indices {h_idx}, {h_idx + 1}.")
+                        h_idx += 2 # Processed this header and its pair, move past both
+                        continue
+                    
+                    # If not excluded, add to trial_names.
+                    # Ensure st2_data_idx (h_idx + 1) is valid for data rows if possible (though this check is also done during data extraction)
+                    st1_data_idx = h_idx
+                    st2_data_idx = h_idx + 1
+                    
+                    # Basic check against actual_data_rows width if available (first data row)
+                    if actual_data_rows and actual_data_rows[0] and st2_data_idx >= len(actual_data_rows[0]):
+                        logger.warning(f"Location '{reconstructed_name}' at header index {h_idx}: Stufe 2 data column {st2_data_idx} would be out of bounds for data row width {len(actual_data_rows[0])}. Skipping this trial pair.")
+                        h_idx += 2 # Move past this header and its presumed pair
+                        continue
+                        
+                    trial_names.append((st1_data_idx, st2_data_idx, reconstructed_name))
+                    logger.info(f"Found trial: '{reconstructed_name}' (from header '{raw_location_name}' at h_idx {h_idx}). Stufe 1 data col: {st1_data_idx}, Stufe 2 data col: {st2_data_idx}.")
+                    h_idx += 2 # Processed a location and its Stufe 2 partner, advance by 2
+                else:
+                    h_idx += 1 # Header cell is empty, or no partner column; advance by 1
+        
+        else: # Single treatment table
+            logger.info("Extracting trial names for 'single treatment' table structure.")
+            max_cols_to_scan = len(headers)
+            if actual_data_rows and len(actual_data_rows[0]) > max_cols_to_scan:
+                 max_cols_to_scan = len(actual_data_rows[0])
+
+            for i in range(1, max_cols_to_scan): # Iterate through potential data column indices
+                if i < len(headers) and headers[i]: # Check if there's a header for this column
+                    raw_trial_name = str(headers[i])
+                    location = self._reconstruct_vertical_text(raw_trial_name)
+                    if (location in ["Mittelwert", "Ertrag bei angepasstem Pflanzenschutz"] or
+                        "Differenz" in location or
+                        self._matches_exclusion_pattern(raw_trial_name, self.exclude_columns)):
+                        excluded_data_indices.add(i)
+                        logger.debug(f"Excluding data column {i}: Location '{location}' (from '{raw_trial_name}') is in exclusion list.")
+                    else:
+                        trial_names.append((i, location)) # Store data column index and location name
+                        logger.info(f"Found trial: '{location}' (Single treatment: col {i})")
+        
+        logger.info(f"Final extracted trial_names: {trial_names}")
+        logger.info(f"Excluded data column indices: {sorted(list(excluded_data_indices))}")
+        
         trait_str = trait if trait else "Default Trait"
         
-        for row_idx, row in enumerate(rows):
-            if not row or any("Mittel" in str(cell) for cell in row):
-                logger.debug(f"Skipping row {row_idx}: Contains mean value")
-                continue
-                
-            variety = self._normalize_german_text(row[0])
-            if not variety or self._matches_exclusion_pattern(variety, self.exclude_rows):
-                logger.debug(f"Skipping variety: {variety} (excluded or mean value)")
+        for row_idx, row_data in enumerate(actual_data_rows):
+            if not row_data or len(row_data) == 0: # Skip empty rows
+                logger.debug(f"Skipping empty row_data at index {row_idx}.")
                 continue
 
-            logger.info(f"Processing variety: {variety} at row {row_idx}")
+            # Variety is usually in the first column (index 0)
+            variety = self._normalize_german_text(row_data[0])
+            if not variety or self._matches_exclusion_pattern(variety, self.exclude_rows) or "Mittelwert" in variety:
+                logger.debug(f"Skipping variety: '{variety}' at row_idx {row_idx} (excluded or mean value).")
+                continue
+
+            logger.info(f"Processing variety: '{variety}' at data_row index {row_idx}")
 
             if is_both_treatment:
-                # Process both treatments (Stufe 1 and Stufe 2)
-                for st1_idx, st2_idx, trial_name in trial_names:
-                    if st1_idx >= len(row) or st2_idx >= len(row):
+                for st1_data_idx, st2_data_idx, trial_name_loc in trial_names:
+                    if st1_data_idx >= len(row_data) or st2_data_idx >= len(row_data):
+                        logger.warning(f"Data column indices {st1_data_idx}/{st2_data_idx} out of bounds for row_data (len {len(row_data)}) for variety '{variety}'. Skipping.")
                         continue
                         
-                    # Process Stufe 1 (intensive)
-                    st1_value = self._clean_value(row[st1_idx])
+                    st1_value = self._clean_value(row_data[st1_data_idx])
                     if st1_value is not None:
                         transformed_rows.append({
-                            'Year': year,
-                            'Trial': f"{year}_whw_de_prt_lsv",
-                            'Trait': trait_str,
-                            'Variety': variety,
-                            'Location': trial_name,
-                            'Treatment': 'intensive',  # Always use 'intensive' for Stufe 1/St 1
-                            'RelativeValue': None,  # No relative value for absolute tables
-                            'AbsoluteValue': st1_value,
-                            'Source': source
+                            'Year': year, 'Trial': f"{year}_whw_de_prt_lsv", 'Trait': trait_str,
+                            'Variety': variety, 'Location': trial_name_loc, 'Treatment': 'intensive',
+                            'RelativeValue': None, 'AbsoluteValue': st1_value, 'Source': source
                         })
-                        logger.info(f"Added data point: Variety={variety}, Location={trial_name}, Treatment=intensive, Value={st1_value}")
+                        logger.debug(f"Added: Var={variety}, Loc={trial_name_loc}, Treat=intensive, Val={st1_value}")
                     
-                    # Process Stufe 2 (extensive)
-                    st2_value = self._clean_value(row[st2_idx])
+                    st2_value = self._clean_value(row_data[st2_data_idx])
                     if st2_value is not None:
                         transformed_rows.append({
-                            'Year': year,
-                            'Trial': f"{year}_whw_de_prt_lsv",
-                            'Trait': trait_str,
-                            'Variety': variety,
-                            'Location': trial_name,
-                            'Treatment': 'extensive',  # Always use 'extensive' for Stufe 2/St 2
-                            'RelativeValue': None,  # No relative value for absolute tables
-                            'AbsoluteValue': st2_value,
-                            'Source': source
+                            'Year': year, 'Trial': f"{year}_whw_de_prt_lsv", 'Trait': trait_str,
+                            'Variety': variety, 'Location': trial_name_loc, 'Treatment': 'extensive',
+                            'RelativeValue': None, 'AbsoluteValue': st2_value, 'Source': source
                         })
-                        logger.info(f"Added data point: Variety={variety}, Location={trial_name}, Treatment=extensive, Value={st2_value}")
-            else:
-                # Process single treatment
-                for col_idx, trial_name in trial_names:
-                    if col_idx >= len(row):
+                        logger.debug(f"Added: Var={variety}, Loc={trial_name_loc}, Treat=extensive, Val={st2_value}")
+            else: # Single treatment
+                # Use the treatment from config, or "Default"
+                current_treatment_val = treatment if treatment and treatment != "Both" else "Default" 
+                if treatment == "Both" and not is_both_treatment: # Config said "Both" but structure isn't Stufe1/2
+                    logger.warning(f"Config treatment is 'Both' but table structure is not Stufe 1/2. Applying '{current_treatment_val}'.")
+
+                for data_col_idx, trial_name_loc in trial_names:
+                    if data_col_idx >= len(row_data):
+                        logger.warning(f"Data column index {data_col_idx} out of bounds for row_data (len {len(row_data)}) for variety '{variety}'. Skipping.")
                         continue
-                        
-                    value = self._clean_value(row[col_idx])
+                    
+                    value = self._clean_value(row_data[data_col_idx])
                     if value is not None:
                         transformed_rows.append({
-                            'Year': year,
-                            'Trial': f"{year}_whw_de_prt_lsv",
-                            'Trait': trait_str,
-                            'Variety': variety,
-                            'Location': trial_name,
-                            'Treatment': treatment if treatment else "Default",  # Use treatment from config for single treatment tables
-                            'RelativeValue': None,  # No relative value for absolute tables
-                            'AbsoluteValue': value,
-                            'Source': source
+                            'Year': year, 'Trial': f"{year}_whw_de_prt_lsv", 'Trait': trait_str,
+                            'Variety': variety, 'Location': trial_name_loc, 'Treatment': current_treatment_val,
+                            'RelativeValue': None, 'AbsoluteValue': value, 'Source': source
                         })
-                        logger.info(f"Added data point: Variety={variety}, Location={trial_name}, Treatment={treatment}, Value={value}")
-
+                        logger.debug(f"Added: Var={variety}, Loc={trial_name_loc}, Treat={current_treatment_val}, Val={value}")
         return transformed_rows
 
     def _clean_value(self, value: Any) -> Optional[float]:

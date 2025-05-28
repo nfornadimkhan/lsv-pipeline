@@ -5,7 +5,7 @@
 
 exclude_columns:
   - contains: Mittelwert
-  - contains: Alle
+  - startswith: Alle
   - startswith: Ertrag
   - startswith: Differen
 
@@ -20,3 +20,4 @@ exclude_rows:
   - startswith: GD(LSD)
   - startswith: VD
   - startswith: Sorte
+  - startswith: Mittel VRS

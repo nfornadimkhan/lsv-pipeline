@@ -1,0 +1,444 @@
+2025-05-28 21:56:47,047 - pdf_pipeline - INFO - Starting new logging session. Log file: logs/pdf_pipeline_20250528_215646.log
+2025-05-28 21:56:47,049 - pdf_pipeline - INFO - [cyan]Starting PDF processing pipeline with configuration:[/cyan]
+2025-05-28 21:56:47,049 - pdf_pipeline - INFO - [cyan]Input directory:[/cyan] /Users/neon/Desktop/pdf-to-data/input
+2025-05-28 21:56:47,050 - pdf_pipeline - INFO - [cyan]Output directory:[/cyan] /Users/neon/Desktop/pdf-to-data/output
+2025-05-28 21:56:47,050 - pdf_pipeline - INFO - [cyan]Structure config:[/cyan] /Users/neon/Desktop/pdf-to-data/config/structure.yaml
+2025-05-28 21:56:47,050 - pdf_pipeline - INFO - [cyan]Exclusions config:[/cyan] /Users/neon/Desktop/pdf-to-data/config/exclusions.yaml
+2025-05-28 21:56:47,052 - pdf_pipeline - INFO - Loaded configuration from /Users/neon/Desktop/pdf-to-data/config/structure.yaml
+2025-05-28 21:56:47,053 - pdf_pipeline - INFO - Loaded configuration from /Users/neon/Desktop/pdf-to-data/config/exclusions.yaml
+2025-05-28 21:56:47,053 - pdf_pipeline - DEBUG - [cyan]Initializing PDFProcessor[/cyan]
+2025-05-28 21:56:47,054 - pdf_pipeline - INFO - [cyan]Initializing DataTransformer[/cyan]
+2025-05-28 21:56:47,054 - pdf_pipeline - DEBUG - [green]Loaded exclude_columns patterns:[/green] [{'type': 'contains', 'value': 'Mittelwert'}, {'type': 'startswith', 'value': 'Alle'}, {'type': 'startswith', 'value': 'Ertrag'}, {'type': 'startswith', 'value': 'Differen'}]
+2025-05-28 21:56:47,055 - pdf_pipeline - DEBUG - [green]Loaded exclude_rows patterns:[/green] [{'type': 'startswith', 'value': 'rel'}, {'type': 'startswith', 'value': 'vgl reduziert'}, {'type': 'startswith', 'value': 'Alle'}, {'type': 'endswith', 'value': 'alle'}, {'type': 'endswith', 'value': 'Latitude XL'}, {'type': 'endswith', 'value': 'WDurum'}, {'type': 'startswith', 'value': 'Differenz'}, {'type': 'startswith', 'value': 'GD(LSD)'}, {'type': 'startswith', 'value': 'VD'}, {'type': 'startswith', 'value': 'Sorte'}, {'type': 'startswith', 'value': 'Mittel VRS'}]
+2025-05-28 21:56:47,059 - pdf_pipeline - INFO - [cyan]Found 3 PDF files to process[/cyan]
+2025-05-28 21:56:47,065 - pdf_pipeline - INFO - [cyan]Processing PDF: /Users/neon/Desktop/pdf-to-data/input/winterweizen-sv-2023.pdf[/cyan]
+2025-05-28 21:56:47,129 - pdf_pipeline - INFO - [cyan]Found 0 configured pages to process[/cyan]
+2025-05-28 21:56:47,129 - pdf_pipeline - INFO - [cyan]No pages configured, processing all pages[/cyan]
+2025-05-28 21:56:47,190 - pdf_pipeline - DEBUG - [green]Page 1: Extracted 2 raw tables structures[/green]
+2025-05-28 21:56:47,190 - pdf_pipeline - WARNING - Page 1, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:47,191 - pdf_pipeline - WARNING - Page 1, Raw Table 1: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:47,366 - pdf_pipeline - DEBUG - [green]Page 2: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:47,366 - pdf_pipeline - WARNING - Page 2, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:47,546 - pdf_pipeline - DEBUG - [green]Page 3: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:47,547 - pdf_pipeline - WARNING - Page 3, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:47,766 - pdf_pipeline - DEBUG - [green]Page 4: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:47,766 - pdf_pipeline - WARNING - Page 4, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:47,932 - pdf_pipeline - DEBUG - [green]Page 5: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:47,932 - pdf_pipeline - WARNING - Page 5, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:48,068 - pdf_pipeline - DEBUG - [green]Page 6: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:48,069 - pdf_pipeline - WARNING - Page 6, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:48,098 - pdf_pipeline - DEBUG - [green]Page 7: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:48,099 - pdf_pipeline - WARNING - Page 7, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:48,250 - pdf_pipeline - DEBUG - [green]Page 8: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:48,251 - pdf_pipeline - WARNING - Page 8, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:48,404 - pdf_pipeline - DEBUG - [green]Page 9: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:48,404 - pdf_pipeline - WARNING - Page 9, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:48,525 - pdf_pipeline - DEBUG - [green]Page 10: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:48,525 - pdf_pipeline - WARNING - Page 10, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:48,556 - pdf_pipeline - DEBUG - [green]Page 11: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:48,557 - pdf_pipeline - WARNING - Page 11, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:48,629 - pdf_pipeline - DEBUG - [green]Page 12: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:48,629 - pdf_pipeline - WARNING - Page 12, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:48,657 - pdf_pipeline - DEBUG - [green]Page 13: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:48,658 - pdf_pipeline - WARNING - Page 13, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:48,692 - pdf_pipeline - DEBUG - [green]Page 14: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:48,693 - pdf_pipeline - WARNING - Page 14, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:48,697 - pdf_pipeline - DEBUG - [green]Page 15: Extracted 0 raw tables structures[/green]
+2025-05-28 21:56:48,703 - pdf_pipeline - DEBUG - [green]Page 16: Extracted 0 raw tables structures[/green]
+2025-05-28 21:56:48,703 - pdf_pipeline - INFO - [green]Extracted 0 tables for further transformation from winterweizen-sv-2023.pdf[/green]
+2025-05-28 21:56:48,704 - pdf_pipeline - WARNING - [yellow]No tables extracted from winterweizen-sv-2023.pdf[/yellow]
+2025-05-28 21:56:48,705 - pdf_pipeline - INFO - [cyan]Processing PDF: /Users/neon/Desktop/pdf-to-data/input/Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf[/cyan]
+2025-05-28 21:56:48,709 - pdf_pipeline - INFO - [cyan]Found 1 configured pages to process[/cyan]
+2025-05-28 21:56:48,858 - pdf_pipeline - DEBUG - [green]Page 29: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:48,859 - pdf_pipeline - DEBUG - Page 29, Raw Table 0: Identified as relevant 'absolute' table. Added for transformation.
+2025-05-28 21:56:48,860 - pdf_pipeline - INFO - [green]Extracted 1 tables for further transformation from Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf[/green]
+2025-05-28 21:56:48,860 - pdf_pipeline - INFO - [cyan]Processing table 1[/cyan]
+2025-05-28 21:56:48,861 - pdf_pipeline - INFO - Table type: absolute, Year: 2023
+2025-05-28 21:56:48,861 - pdf_pipeline - INFO - Transforming absolute table. Initial headers: ['', None, 'BIT / Brecht', None, 'MT / Nomborn', None, 'MÜ / Biedesheim', None, 'NW / Herx- heim', None, 'KH / Wallertheim', None, 'SIM / Kümbdchen', None, 'Mittel', None, ''], Initial rows count: 30
+2025-05-28 21:56:48,862 - pdf_pipeline - INFO - Detected Stufe 1/2 pattern in the first data row (stufe_pattern_count: 14). Treating it as a secondary header.
+2025-05-28 21:56:48,862 - pdf_pipeline - DEBUG - For table with source 'Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf', primary headers used for locations: ['', None, 'BIT / Brecht', None, 'MT / Nomborn', None, 'MÜ / Biedesheim', None, 'NW / Herx- heim', None, 'KH / Wallertheim', None, 'SIM / Kümbdchen', None, 'Mittel', None, '']
+2025-05-28 21:56:48,863 - pdf_pipeline - DEBUG - Secondary header row (from rows[0]): ['Sorte', '', 'Stufe 1', 'Stufe 2', 'Stufe 1', 'Stufe 2', 'Stufe 1', 'Stufe 2', 'Stufe 1', 'Stufe 2', 'Stufe 1', 'Stufe 2', 'Stufe 1', 'Stufe 2', 'Stufe 1', 'Stufe 2', 'Dif.']
+2025-05-28 21:56:48,864 - pdf_pipeline - DEBUG - Effective data rows for processing: 29
+2025-05-28 21:56:48,864 - pdf_pipeline - DEBUG - is_both_treatment flag: True (secondary_header_row_used: True), config treatment: both
+2025-05-28 21:56:48,864 - pdf_pipeline - INFO - Extracting trial names for 'both treatments' table structure.
+2025-05-28 21:56:48,865 - pdf_pipeline - INFO - Found trial: 'BIT / Brecht' (from header 'BIT / Brecht' at h_idx 2). Stufe 1 data col: 2, Stufe 2 data col: 3.
+2025-05-28 21:56:48,865 - pdf_pipeline - INFO - Found trial: 'MT / Nomborn' (from header 'MT / Nomborn' at h_idx 4). Stufe 1 data col: 4, Stufe 2 data col: 5.
+2025-05-28 21:56:48,866 - pdf_pipeline - INFO - Found trial: 'MÜ / Biedesheim' (from header 'MÜ / Biedesheim' at h_idx 6). Stufe 1 data col: 6, Stufe 2 data col: 7.
+2025-05-28 21:56:48,866 - pdf_pipeline - INFO - Found trial: 'NW / Herx- heim' (from header 'NW / Herx- heim' at h_idx 8). Stufe 1 data col: 8, Stufe 2 data col: 9.
+2025-05-28 21:56:48,867 - pdf_pipeline - INFO - Found trial: 'KH / Wallertheim' (from header 'KH / Wallertheim' at h_idx 10). Stufe 1 data col: 10, Stufe 2 data col: 11.
+2025-05-28 21:56:48,867 - pdf_pipeline - INFO - Found trial: 'SIM / Kümbdchen' (from header 'SIM / Kümbdchen' at h_idx 12). Stufe 1 data col: 12, Stufe 2 data col: 13.
+2025-05-28 21:56:48,868 - pdf_pipeline - DEBUG - Excluding data columns for 'Mittelwert' (from 'Mittel' at header index 14): data indices 14, 15.
+2025-05-28 21:56:48,868 - pdf_pipeline - INFO - Final extracted trial_names: [(2, 3, 'BIT / Brecht'), (4, 5, 'MT / Nomborn'), (6, 7, 'MÜ / Biedesheim'), (8, 9, 'NW / Herx- heim'), (10, 11, 'KH / Wallertheim'), (12, 13, 'SIM / Kümbdchen')]
+2025-05-28 21:56:48,869 - pdf_pipeline - INFO - Excluded data column indices: [14, 15]
+2025-05-28 21:56:48,869 - pdf_pipeline - INFO - Processing variety: 'Debian' at data_row index 0
+2025-05-28 21:56:48,870 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=BIT / Brecht, Treat=intensive, Val=75.7
+2025-05-28 21:56:48,870 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=BIT / Brecht, Treat=extensive, Val=82.2
+2025-05-28 21:56:48,871 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=MT / Nomborn, Treat=intensive, Val=107.8
+2025-05-28 21:56:48,872 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=MT / Nomborn, Treat=extensive, Val=111.2
+2025-05-28 21:56:48,872 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=MÜ / Biedesheim, Treat=intensive, Val=91.6
+2025-05-28 21:56:48,873 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=MÜ / Biedesheim, Treat=extensive, Val=97.5
+2025-05-28 21:56:48,873 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=NW / Herx- heim, Treat=intensive, Val=103.4
+2025-05-28 21:56:48,874 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=NW / Herx- heim, Treat=extensive, Val=108.9
+2025-05-28 21:56:48,874 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=KH / Wallertheim, Treat=intensive, Val=72.0
+2025-05-28 21:56:48,874 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=KH / Wallertheim, Treat=extensive, Val=70.5
+2025-05-28 21:56:48,875 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=SIM / Kümbdchen, Treat=intensive, Val=80.6
+2025-05-28 21:56:48,875 - pdf_pipeline - DEBUG - Added: Var=Debian, Loc=SIM / Kümbdchen, Treat=extensive, Val=87.5
+2025-05-28 21:56:48,876 - pdf_pipeline - INFO - Processing variety: 'KWS Mintum' at data_row index 1
+2025-05-28 21:56:48,876 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=BIT / Brecht, Treat=intensive, Val=75.2
+2025-05-28 21:56:48,877 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=BIT / Brecht, Treat=extensive, Val=80.3
+2025-05-28 21:56:48,877 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=MT / Nomborn, Treat=intensive, Val=104.1
+2025-05-28 21:56:48,877 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=MT / Nomborn, Treat=extensive, Val=106.5
+2025-05-28 21:56:48,878 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=MÜ / Biedesheim, Treat=intensive, Val=86.2
+2025-05-28 21:56:48,878 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=MÜ / Biedesheim, Treat=extensive, Val=94.4
+2025-05-28 21:56:48,879 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=NW / Herx- heim, Treat=intensive, Val=98.4
+2025-05-28 21:56:48,879 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=NW / Herx- heim, Treat=extensive, Val=109.9
+2025-05-28 21:56:48,880 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=KH / Wallertheim, Treat=intensive, Val=72.5
+2025-05-28 21:56:48,880 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=KH / Wallertheim, Treat=extensive, Val=72.3
+2025-05-28 21:56:48,881 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=SIM / Kümbdchen, Treat=intensive, Val=85.8
+2025-05-28 21:56:48,881 - pdf_pipeline - DEBUG - Added: Var=KWS Mintum, Loc=SIM / Kümbdchen, Treat=extensive, Val=91.3
+2025-05-28 21:56:48,881 - pdf_pipeline - INFO - Processing variety: 'KWS Keitum' at data_row index 2
+2025-05-28 21:56:48,882 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=BIT / Brecht, Treat=intensive, Val=73.8
+2025-05-28 21:56:48,882 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=BIT / Brecht, Treat=extensive, Val=78.8
+2025-05-28 21:56:48,883 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=MT / Nomborn, Treat=intensive, Val=93.7
+2025-05-28 21:56:48,883 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=MT / Nomborn, Treat=extensive, Val=108.5
+2025-05-28 21:56:48,883 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=MÜ / Biedesheim, Treat=intensive, Val=84.7
+2025-05-28 21:56:48,884 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=MÜ / Biedesheim, Treat=extensive, Val=94.0
+2025-05-28 21:56:48,884 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=NW / Herx- heim, Treat=intensive, Val=95.7
+2025-05-28 21:56:48,885 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=NW / Herx- heim, Treat=extensive, Val=111.7
+2025-05-28 21:56:48,886 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=KH / Wallertheim, Treat=intensive, Val=80.5
+2025-05-28 21:56:48,886 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=KH / Wallertheim, Treat=extensive, Val=73.5
+2025-05-28 21:56:48,886 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=SIM / Kümbdchen, Treat=intensive, Val=91.9
+2025-05-28 21:56:48,887 - pdf_pipeline - DEBUG - Added: Var=KWS Keitum, Loc=SIM / Kümbdchen, Treat=extensive, Val=91.4
+2025-05-28 21:56:48,887 - pdf_pipeline - INFO - Processing variety: 'KWS Imperium' at data_row index 3
+2025-05-28 21:56:48,888 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=BIT / Brecht, Treat=intensive, Val=77.1
+2025-05-28 21:56:48,888 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=BIT / Brecht, Treat=extensive, Val=75.7
+2025-05-28 21:56:48,888 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=MT / Nomborn, Treat=intensive, Val=99.5
+2025-05-28 21:56:48,889 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=MT / Nomborn, Treat=extensive, Val=100.6
+2025-05-28 21:56:48,889 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=MÜ / Biedesheim, Treat=intensive, Val=86.4
+2025-05-28 21:56:48,890 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=MÜ / Biedesheim, Treat=extensive, Val=87.7
+2025-05-28 21:56:48,890 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=NW / Herx- heim, Treat=intensive, Val=96.5
+2025-05-28 21:56:48,891 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=NW / Herx- heim, Treat=extensive, Val=105.6
+2025-05-28 21:56:48,891 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=KH / Wallertheim, Treat=intensive, Val=77.4
+2025-05-28 21:56:48,892 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=KH / Wallertheim, Treat=extensive, Val=71.5
+2025-05-28 21:56:48,892 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=SIM / Kümbdchen, Treat=intensive, Val=83.5
+2025-05-28 21:56:48,893 - pdf_pipeline - DEBUG - Added: Var=KWS Imperium, Loc=SIM / Kümbdchen, Treat=extensive, Val=88.9
+2025-05-28 21:56:48,893 - pdf_pipeline - INFO - Processing variety: 'Chevignon (EU)' at data_row index 4
+2025-05-28 21:56:48,894 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=BIT / Brecht, Treat=intensive, Val=79.0
+2025-05-28 21:56:48,894 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=BIT / Brecht, Treat=extensive, Val=80.9
+2025-05-28 21:56:48,895 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=MT / Nomborn, Treat=intensive, Val=101.3
+2025-05-28 21:56:48,895 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=MT / Nomborn, Treat=extensive, Val=109.5
+2025-05-28 21:56:48,896 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=MÜ / Biedesheim, Treat=intensive, Val=83.6
+2025-05-28 21:56:48,896 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=MÜ / Biedesheim, Treat=extensive, Val=88.8
+2025-05-28 21:56:48,897 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=NW / Herx- heim, Treat=intensive, Val=98.8
+2025-05-28 21:56:48,897 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=NW / Herx- heim, Treat=extensive, Val=110.9
+2025-05-28 21:56:48,898 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=KH / Wallertheim, Treat=intensive, Val=69.4
+2025-05-28 21:56:48,898 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=KH / Wallertheim, Treat=extensive, Val=71.7
+2025-05-28 21:56:48,898 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=SIM / Kümbdchen, Treat=intensive, Val=83.2
+2025-05-28 21:56:48,899 - pdf_pipeline - DEBUG - Added: Var=Chevignon (EU), Loc=SIM / Kümbdchen, Treat=extensive, Val=91.1
+2025-05-28 21:56:48,899 - pdf_pipeline - INFO - Processing variety: 'Revolver' at data_row index 5
+2025-05-28 21:56:48,900 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=BIT / Brecht, Treat=intensive, Val=70.1
+2025-05-28 21:56:48,900 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=BIT / Brecht, Treat=extensive, Val=70.2
+2025-05-28 21:56:48,901 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=MT / Nomborn, Treat=intensive, Val=100.8
+2025-05-28 21:56:48,901 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=MT / Nomborn, Treat=extensive, Val=104.1
+2025-05-28 21:56:48,901 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=MÜ / Biedesheim, Treat=intensive, Val=87.8
+2025-05-28 21:56:48,902 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=MÜ / Biedesheim, Treat=extensive, Val=88.2
+2025-05-28 21:56:48,902 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=NW / Herx- heim, Treat=intensive, Val=99.1
+2025-05-28 21:56:48,903 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=NW / Herx- heim, Treat=extensive, Val=99.0
+2025-05-28 21:56:48,903 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=KH / Wallertheim, Treat=intensive, Val=71.8
+2025-05-28 21:56:48,904 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=KH / Wallertheim, Treat=extensive, Val=74.9
+2025-05-28 21:56:48,904 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=SIM / Kümbdchen, Treat=intensive, Val=79.0
+2025-05-28 21:56:48,905 - pdf_pipeline - DEBUG - Added: Var=Revolver, Loc=SIM / Kümbdchen, Treat=extensive, Val=85.1
+2025-05-28 21:56:48,905 - pdf_pipeline - INFO - Processing variety: 'Spectral' at data_row index 6
+2025-05-28 21:56:48,905 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=BIT / Brecht, Treat=intensive, Val=72.1
+2025-05-28 21:56:48,906 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=BIT / Brecht, Treat=extensive, Val=76.3
+2025-05-28 21:56:48,906 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=MT / Nomborn, Treat=intensive, Val=102.6
+2025-05-28 21:56:48,907 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=MT / Nomborn, Treat=extensive, Val=105.1
+2025-05-28 21:56:48,907 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=MÜ / Biedesheim, Treat=intensive, Val=80.9
+2025-05-28 21:56:48,907 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=MÜ / Biedesheim, Treat=extensive, Val=90.6
+2025-05-28 21:56:48,908 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=NW / Herx- heim, Treat=intensive, Val=91.6
+2025-05-28 21:56:48,908 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=NW / Herx- heim, Treat=extensive, Val=104.7
+2025-05-28 21:56:48,909 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=KH / Wallertheim, Treat=intensive, Val=73.8
+2025-05-28 21:56:48,909 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=KH / Wallertheim, Treat=extensive, Val=66.7
+2025-05-28 21:56:48,910 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=SIM / Kümbdchen, Treat=intensive, Val=83.9
+2025-05-28 21:56:48,910 - pdf_pipeline - DEBUG - Added: Var=Spectral, Loc=SIM / Kümbdchen, Treat=extensive, Val=88.5
+2025-05-28 21:56:48,910 - pdf_pipeline - INFO - Processing variety: 'Knut' at data_row index 7
+2025-05-28 21:56:48,911 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=BIT / Brecht, Treat=intensive, Val=70.5
+2025-05-28 21:56:48,911 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=BIT / Brecht, Treat=extensive, Val=69.0
+2025-05-28 21:56:48,912 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=MT / Nomborn, Treat=intensive, Val=102.4
+2025-05-28 21:56:48,912 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=MT / Nomborn, Treat=extensive, Val=106.3
+2025-05-28 21:56:48,913 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=MÜ / Biedesheim, Treat=intensive, Val=80.0
+2025-05-28 21:56:48,913 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=MÜ / Biedesheim, Treat=extensive, Val=86.4
+2025-05-28 21:56:48,913 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=NW / Herx- heim, Treat=intensive, Val=98.9
+2025-05-28 21:56:48,914 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=NW / Herx- heim, Treat=extensive, Val=96.0
+2025-05-28 21:56:48,914 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=KH / Wallertheim, Treat=intensive, Val=74.8
+2025-05-28 21:56:48,915 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=KH / Wallertheim, Treat=extensive, Val=63.5
+2025-05-28 21:56:48,915 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=SIM / Kümbdchen, Treat=intensive, Val=77.5
+2025-05-28 21:56:48,916 - pdf_pipeline - DEBUG - Added: Var=Knut, Loc=SIM / Kümbdchen, Treat=extensive, Val=87.1
+2025-05-28 21:56:48,916 - pdf_pipeline - INFO - Processing variety: 'Hyvega H' at data_row index 8
+2025-05-28 21:56:48,916 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=BIT / Brecht, Treat=intensive, Val=76.0
+2025-05-28 21:56:48,917 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=BIT / Brecht, Treat=extensive, Val=76.2
+2025-05-28 21:56:48,917 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=MT / Nomborn, Treat=intensive, Val=99.8
+2025-05-28 21:56:48,918 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=MT / Nomborn, Treat=extensive, Val=105.0
+2025-05-28 21:56:48,918 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=MÜ / Biedesheim, Treat=intensive, Val=82.1
+2025-05-28 21:56:48,919 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=MÜ / Biedesheim, Treat=extensive, Val=89.5
+2025-05-28 21:56:48,919 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=NW / Herx- heim, Treat=intensive, Val=88.4
+2025-05-28 21:56:48,920 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=NW / Herx- heim, Treat=extensive, Val=104.4
+2025-05-28 21:56:48,920 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=KH / Wallertheim, Treat=intensive, Val=74.0
+2025-05-28 21:56:48,920 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=KH / Wallertheim, Treat=extensive, Val=71.8
+2025-05-28 21:56:48,921 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=SIM / Kümbdchen, Treat=intensive, Val=83.5
+2025-05-28 21:56:48,921 - pdf_pipeline - DEBUG - Added: Var=Hyvega H, Loc=SIM / Kümbdchen, Treat=extensive, Val=89.9
+2025-05-28 21:56:48,922 - pdf_pipeline - INFO - Processing variety: 'Attribut' at data_row index 9
+2025-05-28 21:56:48,922 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=BIT / Brecht, Treat=intensive, Val=72.3
+2025-05-28 21:56:48,922 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=BIT / Brecht, Treat=extensive, Val=73.0
+2025-05-28 21:56:48,923 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=MT / Nomborn, Treat=intensive, Val=101.3
+2025-05-28 21:56:48,923 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=MT / Nomborn, Treat=extensive, Val=100.7
+2025-05-28 21:56:48,924 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=MÜ / Biedesheim, Treat=intensive, Val=83.2
+2025-05-28 21:56:48,924 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=MÜ / Biedesheim, Treat=extensive, Val=86.5
+2025-05-28 21:56:48,925 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=NW / Herx- heim, Treat=intensive, Val=93.1
+2025-05-28 21:56:48,925 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=NW / Herx- heim, Treat=extensive, Val=97.6
+2025-05-28 21:56:48,925 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=KH / Wallertheim, Treat=intensive, Val=72.9
+2025-05-28 21:56:48,926 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=KH / Wallertheim, Treat=extensive, Val=76.3
+2025-05-28 21:56:48,926 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=SIM / Kümbdchen, Treat=intensive, Val=81.0
+2025-05-28 21:56:48,927 - pdf_pipeline - DEBUG - Added: Var=Attribut, Loc=SIM / Kümbdchen, Treat=extensive, Val=85.2
+2025-05-28 21:56:48,927 - pdf_pipeline - INFO - Processing variety: 'Polarkap' at data_row index 10
+2025-05-28 21:56:48,928 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=BIT / Brecht, Treat=intensive, Val=74.3
+2025-05-28 21:56:48,928 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=BIT / Brecht, Treat=extensive, Val=77.2
+2025-05-28 21:56:48,928 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=MT / Nomborn, Treat=intensive, Val=99.2
+2025-05-28 21:56:48,929 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=MT / Nomborn, Treat=extensive, Val=101.8
+2025-05-28 21:56:48,929 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=MÜ / Biedesheim, Treat=intensive, Val=81.7
+2025-05-28 21:56:48,930 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=MÜ / Biedesheim, Treat=extensive, Val=84.3
+2025-05-28 21:56:48,930 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=NW / Herx- heim, Treat=intensive, Val=93.9
+2025-05-28 21:56:48,931 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=NW / Herx- heim, Treat=extensive, Val=96.2
+2025-05-28 21:56:48,931 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=KH / Wallertheim, Treat=intensive, Val=66.1
+2025-05-28 21:56:48,931 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=KH / Wallertheim, Treat=extensive, Val=64.2
+2025-05-28 21:56:48,932 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=SIM / Kümbdchen, Treat=intensive, Val=77.3
+2025-05-28 21:56:48,932 - pdf_pipeline - DEBUG - Added: Var=Polarkap, Loc=SIM / Kümbdchen, Treat=extensive, Val=83.6
+2025-05-28 21:56:48,933 - pdf_pipeline - INFO - Processing variety: 'KWS Emerick' at data_row index 11
+2025-05-28 21:56:48,933 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=BIT / Brecht, Treat=intensive, Val=72.4
+2025-05-28 21:56:48,933 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=BIT / Brecht, Treat=extensive, Val=77.4
+2025-05-28 21:56:48,934 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=MT / Nomborn, Treat=intensive, Val=92.9
+2025-05-28 21:56:48,934 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=MT / Nomborn, Treat=extensive, Val=98.1
+2025-05-28 21:56:48,935 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=MÜ / Biedesheim, Treat=intensive, Val=77.9
+2025-05-28 21:56:48,935 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=MÜ / Biedesheim, Treat=extensive, Val=82.3
+2025-05-28 21:56:48,936 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=NW / Herx- heim, Treat=intensive, Val=94.9
+2025-05-28 21:56:48,937 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=NW / Herx- heim, Treat=extensive, Val=102.9
+2025-05-28 21:56:48,937 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=KH / Wallertheim, Treat=intensive, Val=73.5
+2025-05-28 21:56:48,937 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=KH / Wallertheim, Treat=extensive, Val=72.0
+2025-05-28 21:56:48,938 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=SIM / Kümbdchen, Treat=intensive, Val=79.9
+2025-05-28 21:56:48,938 - pdf_pipeline - DEBUG - Added: Var=KWS Emerick, Loc=SIM / Kümbdchen, Treat=extensive, Val=87.8
+2025-05-28 21:56:48,939 - pdf_pipeline - INFO - Processing variety: 'SU Jonte' at data_row index 12
+2025-05-28 21:56:48,939 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=BIT / Brecht, Treat=intensive, Val=71.8
+2025-05-28 21:56:48,939 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=BIT / Brecht, Treat=extensive, Val=73.9
+2025-05-28 21:56:48,940 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=MT / Nomborn, Treat=intensive, Val=95.7
+2025-05-28 21:56:48,940 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=MT / Nomborn, Treat=extensive, Val=96.2
+2025-05-28 21:56:48,941 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=MÜ / Biedesheim, Treat=intensive, Val=82.1
+2025-05-28 21:56:48,942 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=MÜ / Biedesheim, Treat=extensive, Val=88.1
+2025-05-28 21:56:48,942 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=NW / Herx- heim, Treat=intensive, Val=95.1
+2025-05-28 21:56:48,942 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=NW / Herx- heim, Treat=extensive, Val=97.8
+2025-05-28 21:56:48,943 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=KH / Wallertheim, Treat=intensive, Val=70.7
+2025-05-28 21:56:48,943 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=KH / Wallertheim, Treat=extensive, Val=69.9
+2025-05-28 21:56:48,944 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=SIM / Kümbdchen, Treat=intensive, Val=73.9
+2025-05-28 21:56:48,944 - pdf_pipeline - DEBUG - Added: Var=SU Jonte, Loc=SIM / Kümbdchen, Treat=extensive, Val=81.6
+2025-05-28 21:56:48,945 - pdf_pipeline - INFO - Processing variety: 'Exsal' at data_row index 13
+2025-05-28 21:56:48,945 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=BIT / Brecht, Treat=intensive, Val=74.3
+2025-05-28 21:56:48,946 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=BIT / Brecht, Treat=extensive, Val=75.0
+2025-05-28 21:56:48,946 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=MT / Nomborn, Treat=intensive, Val=90.4
+2025-05-28 21:56:48,947 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=MT / Nomborn, Treat=extensive, Val=100.8
+2025-05-28 21:56:48,947 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=MÜ / Biedesheim, Treat=intensive, Val=80.6
+2025-05-28 21:56:48,948 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=MÜ / Biedesheim, Treat=extensive, Val=86.5
+2025-05-28 21:56:48,948 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=NW / Herx- heim, Treat=intensive, Val=92.6
+2025-05-28 21:56:48,948 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=NW / Herx- heim, Treat=extensive, Val=97.2
+2025-05-28 21:56:48,949 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=KH / Wallertheim, Treat=intensive, Val=73.2
+2025-05-28 21:56:48,949 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=KH / Wallertheim, Treat=extensive, Val=68.6
+2025-05-28 21:56:48,950 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=SIM / Kümbdchen, Treat=intensive, Val=72.3
+2025-05-28 21:56:48,950 - pdf_pipeline - DEBUG - Added: Var=Exsal, Loc=SIM / Kümbdchen, Treat=extensive, Val=82.5
+2025-05-28 21:56:48,951 - pdf_pipeline - INFO - Processing variety: 'Asory' at data_row index 14
+2025-05-28 21:56:48,951 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=BIT / Brecht, Treat=intensive, Val=77.0
+2025-05-28 21:56:48,951 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=BIT / Brecht, Treat=extensive, Val=75.8
+2025-05-28 21:56:48,952 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=MT / Nomborn, Treat=intensive, Val=90.9
+2025-05-28 21:56:48,952 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=MT / Nomborn, Treat=extensive, Val=93.0
+2025-05-28 21:56:48,953 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=MÜ / Biedesheim, Treat=intensive, Val=75.2
+2025-05-28 21:56:48,953 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=MÜ / Biedesheim, Treat=extensive, Val=76.7
+2025-05-28 21:56:48,953 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=NW / Herx- heim, Treat=intensive, Val=93.7
+2025-05-28 21:56:48,954 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=NW / Herx- heim, Treat=extensive, Val=103.7
+2025-05-28 21:56:48,954 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=KH / Wallertheim, Treat=intensive, Val=71.0
+2025-05-28 21:56:48,955 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=KH / Wallertheim, Treat=extensive, Val=72.0
+2025-05-28 21:56:48,955 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=SIM / Kümbdchen, Treat=intensive, Val=75.1
+2025-05-28 21:56:48,956 - pdf_pipeline - DEBUG - Added: Var=Asory, Loc=SIM / Kümbdchen, Treat=extensive, Val=83.9
+2025-05-28 21:56:48,956 - pdf_pipeline - INFO - Processing variety: 'Absint' at data_row index 15
+2025-05-28 21:56:48,956 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=BIT / Brecht, Treat=intensive, Val=66.8
+2025-05-28 21:56:48,957 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=BIT / Brecht, Treat=extensive, Val=71.7
+2025-05-28 21:56:48,957 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=MT / Nomborn, Treat=intensive, Val=90.6
+2025-05-28 21:56:48,958 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=MT / Nomborn, Treat=extensive, Val=94.0
+2025-05-28 21:56:48,958 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=MÜ / Biedesheim, Treat=intensive, Val=78.6
+2025-05-28 21:56:48,958 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=MÜ / Biedesheim, Treat=extensive, Val=83.9
+2025-05-28 21:56:48,959 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=NW / Herx- heim, Treat=intensive, Val=95.1
+2025-05-28 21:56:48,959 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=NW / Herx- heim, Treat=extensive, Val=96.4
+2025-05-28 21:56:48,960 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=KH / Wallertheim, Treat=intensive, Val=69.2
+2025-05-28 21:56:48,960 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=KH / Wallertheim, Treat=extensive, Val=69.3
+2025-05-28 21:56:48,961 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=SIM / Kümbdchen, Treat=intensive, Val=79.8
+2025-05-28 21:56:48,961 - pdf_pipeline - DEBUG - Added: Var=Absint, Loc=SIM / Kümbdchen, Treat=extensive, Val=85.6
+2025-05-28 21:56:48,962 - pdf_pipeline - INFO - Processing variety: 'Cayenne' at data_row index 16
+2025-05-28 21:56:48,962 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=BIT / Brecht, Treat=intensive, Val=75.5
+2025-05-28 21:56:48,962 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=BIT / Brecht, Treat=extensive, Val=75.3
+2025-05-28 21:56:48,963 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=MT / Nomborn, Treat=intensive, Val=96.3
+2025-05-28 21:56:48,963 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=MT / Nomborn, Treat=extensive, Val=97.0
+2025-05-28 21:56:48,963 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=MÜ / Biedesheim, Treat=intensive, Val=78.6
+2025-05-28 21:56:48,964 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=MÜ / Biedesheim, Treat=extensive, Val=79.1
+2025-05-28 21:56:48,964 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=NW / Herx- heim, Treat=intensive, Val=84.9
+2025-05-28 21:56:48,965 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=NW / Herx- heim, Treat=extensive, Val=91.6
+2025-05-28 21:56:48,965 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=KH / Wallertheim, Treat=intensive, Val=67.5
+2025-05-28 21:56:48,966 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=KH / Wallertheim, Treat=extensive, Val=65.7
+2025-05-28 21:56:48,966 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=SIM / Kümbdchen, Treat=intensive, Val=76.6
+2025-05-28 21:56:48,967 - pdf_pipeline - DEBUG - Added: Var=Cayenne, Loc=SIM / Kümbdchen, Treat=extensive, Val=84.0
+2025-05-28 21:56:48,967 - pdf_pipeline - INFO - Processing variety: 'SU Willem' at data_row index 17
+2025-05-28 21:56:48,967 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=BIT / Brecht, Treat=intensive, Val=75.9
+2025-05-28 21:56:48,968 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=BIT / Brecht, Treat=extensive, Val=77.4
+2025-05-28 21:56:48,968 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=MT / Nomborn, Treat=intensive, Val=96.5
+2025-05-28 21:56:48,969 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=MT / Nomborn, Treat=extensive, Val=110.1
+2025-05-28 21:56:48,969 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=MÜ / Biedesheim, Treat=intensive, Val=75.6
+2025-05-28 21:56:48,970 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=MÜ / Biedesheim, Treat=extensive, Val=85.4
+2025-05-28 21:56:48,970 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=NW / Herx- heim, Treat=intensive, Val=82.1
+2025-05-28 21:56:48,971 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=NW / Herx- heim, Treat=extensive, Val=96.0
+2025-05-28 21:56:48,971 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=KH / Wallertheim, Treat=intensive, Val=63.8
+2025-05-28 21:56:48,971 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=KH / Wallertheim, Treat=extensive, Val=74.4
+2025-05-28 21:56:48,972 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=SIM / Kümbdchen, Treat=intensive, Val=81.0
+2025-05-28 21:56:48,972 - pdf_pipeline - DEBUG - Added: Var=SU Willem, Loc=SIM / Kümbdchen, Treat=extensive, Val=89.3
+2025-05-28 21:56:48,973 - pdf_pipeline - INFO - Processing variety: 'RGT Reform' at data_row index 18
+2025-05-28 21:56:48,973 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=BIT / Brecht, Treat=intensive, Val=70.0
+2025-05-28 21:56:48,973 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=BIT / Brecht, Treat=extensive, Val=74.5
+2025-05-28 21:56:48,974 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=MT / Nomborn, Treat=intensive, Val=92.1
+2025-05-28 21:56:48,974 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=MT / Nomborn, Treat=extensive, Val=97.1
+2025-05-28 21:56:48,975 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=MÜ / Biedesheim, Treat=intensive, Val=79.0
+2025-05-28 21:56:48,975 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=MÜ / Biedesheim, Treat=extensive, Val=83.2
+2025-05-28 21:56:48,976 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=NW / Herx- heim, Treat=intensive, Val=90.7
+2025-05-28 21:56:48,976 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=NW / Herx- heim, Treat=extensive, Val=104.4
+2025-05-28 21:56:48,976 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=KH / Wallertheim, Treat=intensive, Val=64.3
+2025-05-28 21:56:48,977 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=KH / Wallertheim, Treat=extensive, Val=65.7
+2025-05-28 21:56:48,977 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=SIM / Kümbdchen, Treat=intensive, Val=75.6
+2025-05-28 21:56:48,978 - pdf_pipeline - DEBUG - Added: Var=RGT Reform, Loc=SIM / Kümbdchen, Treat=extensive, Val=80.5
+2025-05-28 21:56:48,978 - pdf_pipeline - INFO - Processing variety: 'Akzent' at data_row index 19
+2025-05-28 21:56:48,979 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=BIT / Brecht, Treat=intensive, Val=73.8
+2025-05-28 21:56:48,979 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=BIT / Brecht, Treat=extensive, Val=69.4
+2025-05-28 21:56:48,980 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=MT / Nomborn, Treat=intensive, Val=88.4
+2025-05-28 21:56:48,980 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=MT / Nomborn, Treat=extensive, Val=100.6
+2025-05-28 21:56:48,980 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=MÜ / Biedesheim, Treat=intensive, Val=75.4
+2025-05-28 21:56:48,981 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=MÜ / Biedesheim, Treat=extensive, Val=84.7
+2025-05-28 21:56:48,981 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=NW / Herx- heim, Treat=intensive, Val=87.6
+2025-05-28 21:56:48,982 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=NW / Herx- heim, Treat=extensive, Val=96.8
+2025-05-28 21:56:48,982 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=KH / Wallertheim, Treat=intensive, Val=62.4
+2025-05-28 21:56:48,983 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=KH / Wallertheim, Treat=extensive, Val=62.4
+2025-05-28 21:56:48,983 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=SIM / Kümbdchen, Treat=intensive, Val=77.7
+2025-05-28 21:56:48,983 - pdf_pipeline - DEBUG - Added: Var=Akzent, Loc=SIM / Kümbdchen, Treat=extensive, Val=86.2
+2025-05-28 21:56:48,984 - pdf_pipeline - INFO - Processing variety: 'KWS Mitchum' at data_row index 20
+2025-05-28 21:56:48,984 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=BIT / Brecht, Treat=intensive, Val=66.6
+2025-05-28 21:56:48,985 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=BIT / Brecht, Treat=extensive, Val=68.6
+2025-05-28 21:56:48,985 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=MT / Nomborn, Treat=intensive, Val=89.2
+2025-05-28 21:56:48,986 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=MT / Nomborn, Treat=extensive, Val=94.9
+2025-05-28 21:56:48,986 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=MÜ / Biedesheim, Treat=intensive, Val=72.0
+2025-05-28 21:56:48,987 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=MÜ / Biedesheim, Treat=extensive, Val=77.5
+2025-05-28 21:56:48,987 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=NW / Herx- heim, Treat=intensive, Val=91.9
+2025-05-28 21:56:48,987 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=NW / Herx- heim, Treat=extensive, Val=92.8
+2025-05-28 21:56:48,988 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=KH / Wallertheim, Treat=intensive, Val=66.6
+2025-05-28 21:56:48,988 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=KH / Wallertheim, Treat=extensive, Val=64.2
+2025-05-28 21:56:48,989 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=SIM / Kümbdchen, Treat=intensive, Val=76.6
+2025-05-28 21:56:48,989 - pdf_pipeline - DEBUG - Added: Var=KWS Mitchum, Loc=SIM / Kümbdchen, Treat=extensive, Val=77.6
+2025-05-28 21:56:48,990 - pdf_pipeline - INFO - Processing variety: 'Foxx g' at data_row index 21
+2025-05-28 21:56:48,990 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=BIT / Brecht, Treat=intensive, Val=69.9
+2025-05-28 21:56:48,990 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=BIT / Brecht, Treat=extensive, Val=72.2
+2025-05-28 21:56:48,991 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=MT / Nomborn, Treat=intensive, Val=92.0
+2025-05-28 21:56:48,991 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=MT / Nomborn, Treat=extensive, Val=97.1
+2025-05-28 21:56:48,992 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=MÜ / Biedesheim, Treat=intensive, Val=73.7
+2025-05-28 21:56:48,992 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=MÜ / Biedesheim, Treat=extensive, Val=80.5
+2025-05-28 21:56:48,992 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=NW / Herx- heim, Treat=intensive, Val=84.6
+2025-05-28 21:56:48,993 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=NW / Herx- heim, Treat=extensive, Val=97.9
+2025-05-28 21:56:48,993 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=KH / Wallertheim, Treat=intensive, Val=62.1
+2025-05-28 21:56:48,994 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=KH / Wallertheim, Treat=extensive, Val=64.6
+2025-05-28 21:56:48,994 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=SIM / Kümbdchen, Treat=intensive, Val=78.4
+2025-05-28 21:56:48,995 - pdf_pipeline - DEBUG - Added: Var=Foxx g, Loc=SIM / Kümbdchen, Treat=extensive, Val=85.6
+2025-05-28 21:56:48,995 - pdf_pipeline - INFO - Processing variety: 'Absolut' at data_row index 22
+2025-05-28 21:56:48,996 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=BIT / Brecht, Treat=intensive, Val=59.6
+2025-05-28 21:56:48,996 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=BIT / Brecht, Treat=extensive, Val=61.8
+2025-05-28 21:56:48,997 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=MT / Nomborn, Treat=intensive, Val=85.7
+2025-05-28 21:56:48,997 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=MT / Nomborn, Treat=extensive, Val=91.0
+2025-05-28 21:56:48,998 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=MÜ / Biedesheim, Treat=intensive, Val=70.4
+2025-05-28 21:56:48,998 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=MÜ / Biedesheim, Treat=extensive, Val=79.5
+2025-05-28 21:56:48,998 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=NW / Herx- heim, Treat=intensive, Val=97.6
+2025-05-28 21:56:48,999 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=NW / Herx- heim, Treat=extensive, Val=103.8
+2025-05-28 21:56:48,999 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=KH / Wallertheim, Treat=intensive, Val=72.1
+2025-05-28 21:56:49,000 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=KH / Wallertheim, Treat=extensive, Val=67.2
+2025-05-28 21:56:49,000 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=SIM / Kümbdchen, Treat=intensive, Val=68.4
+2025-05-28 21:56:49,001 - pdf_pipeline - DEBUG - Added: Var=Absolut, Loc=SIM / Kümbdchen, Treat=extensive, Val=77.9
+2025-05-28 21:56:49,001 - pdf_pipeline - INFO - Processing variety: 'Informer' at data_row index 23
+2025-05-28 21:56:49,001 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=BIT / Brecht, Treat=intensive, Val=70.7
+2025-05-28 21:56:49,002 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=BIT / Brecht, Treat=extensive, Val=70.3
+2025-05-28 21:56:49,002 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=MT / Nomborn, Treat=intensive, Val=92.3
+2025-05-28 21:56:49,003 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=MT / Nomborn, Treat=extensive, Val=99.5
+2025-05-28 21:56:49,003 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=MÜ / Biedesheim, Treat=intensive, Val=70.2
+2025-05-28 21:56:49,004 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=MÜ / Biedesheim, Treat=extensive, Val=84.1
+2025-05-28 21:56:49,004 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=NW / Herx- heim, Treat=intensive, Val=80.4
+2025-05-28 21:56:49,004 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=NW / Herx- heim, Treat=extensive, Val=92.3
+2025-05-28 21:56:49,005 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=KH / Wallertheim, Treat=intensive, Val=63.2
+2025-05-28 21:56:49,005 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=KH / Wallertheim, Treat=extensive, Val=64.6
+2025-05-28 21:56:49,006 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=SIM / Kümbdchen, Treat=intensive, Val=74.2
+2025-05-28 21:56:49,006 - pdf_pipeline - DEBUG - Added: Var=Informer, Loc=SIM / Kümbdchen, Treat=extensive, Val=84.3
+2025-05-28 21:56:49,007 - pdf_pipeline - INFO - Processing variety: 'Akasha' at data_row index 24
+2025-05-28 21:56:49,007 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=BIT / Brecht, Treat=intensive, Val=66.3
+2025-05-28 21:56:49,007 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=BIT / Brecht, Treat=extensive, Val=75.6
+2025-05-28 21:56:49,008 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=MT / Nomborn, Treat=intensive, Val=84.9
+2025-05-28 21:56:49,008 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=MT / Nomborn, Treat=extensive, Val=101.5
+2025-05-28 21:56:49,009 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=MÜ / Biedesheim, Treat=intensive, Val=76.7
+2025-05-28 21:56:49,009 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=MÜ / Biedesheim, Treat=extensive, Val=78.6
+2025-05-28 21:56:49,009 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=NW / Herx- heim, Treat=intensive, Val=84.3
+2025-05-28 21:56:49,010 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=NW / Herx- heim, Treat=extensive, Val=87.9
+2025-05-28 21:56:49,010 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=KH / Wallertheim, Treat=intensive, Val=55.0
+2025-05-28 21:56:49,011 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=KH / Wallertheim, Treat=extensive, Val=57.1
+2025-05-28 21:56:49,011 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=SIM / Kümbdchen, Treat=intensive, Val=74.1
+2025-05-28 21:56:49,012 - pdf_pipeline - DEBUG - Added: Var=Akasha, Loc=SIM / Kümbdchen, Treat=extensive, Val=83.6
+2025-05-28 21:56:49,012 - pdf_pipeline - INFO - Processing variety: 'KWS Donovan' at data_row index 25
+2025-05-28 21:56:49,013 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=BIT / Brecht, Treat=intensive, Val=66.0
+2025-05-28 21:56:49,013 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=BIT / Brecht, Treat=extensive, Val=77.8
+2025-05-28 21:56:49,013 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=MT / Nomborn, Treat=intensive, Val=73.2
+2025-05-28 21:56:49,014 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=MT / Nomborn, Treat=extensive, Val=105.7
+2025-05-28 21:56:49,014 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=MÜ / Biedesheim, Treat=intensive, Val=66.1
+2025-05-28 21:56:49,015 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=MÜ / Biedesheim, Treat=extensive, Val=86.5
+2025-05-28 21:56:49,015 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=NW / Herx- heim, Treat=intensive, Val=60.8
+2025-05-28 21:56:49,016 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=NW / Herx- heim, Treat=extensive, Val=88.0
+2025-05-28 21:56:49,016 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=KH / Wallertheim, Treat=intensive, Val=51.9
+2025-05-28 21:56:49,017 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=KH / Wallertheim, Treat=extensive, Val=64.8
+2025-05-28 21:56:49,017 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=SIM / Kümbdchen, Treat=intensive, Val=78.8
+2025-05-28 21:56:49,017 - pdf_pipeline - DEBUG - Added: Var=KWS Donovan, Loc=SIM / Kümbdchen, Treat=extensive, Val=86.4
+2025-05-28 21:56:49,018 - pdf_pipeline - DEBUG - Skipping variety: 'Mittel VRS' at row_idx 26 (excluded or mean value).
+2025-05-28 21:56:49,018 - pdf_pipeline - DEBUG - Skipping variety: 'GD(LSD)' at row_idx 27 (excluded or mean value).
+2025-05-28 21:56:49,019 - pdf_pipeline - DEBUG - Skipping variety: 'VD' at row_idx 28 (excluded or mean value).
+2025-05-28 21:56:49,019 - pdf_pipeline - INFO - Transformed 312 rows from table 1
+2025-05-28 21:56:49,021 - pdf_pipeline - INFO - Final DataFrame shape: (312, 9)
+2025-05-28 21:56:49,021 - pdf_pipeline - INFO - Columns: ['Year', 'Trial', 'Trait', 'Variety', 'Location', 'Treatment', 'RelativeValue', 'AbsoluteValue', 'Source']
+2025-05-28 21:56:49,028 - pdf_pipeline - INFO - Sample data:
+   Year                Trial  ... AbsoluteValue                                             Source
+0  2023  2023_whw_de_prt_lsv  ...          75.7  Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf
+1  2023  2023_whw_de_prt_lsv  ...          82.2  Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf
+2  2023  2023_whw_de_prt_lsv  ...         107.8  Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf
+3  2023  2023_whw_de_prt_lsv  ...         111.2  Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf
+4  2023  2023_whw_de_prt_lsv  ...          91.6  Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf
+
+[5 rows x 9 columns]
+2025-05-28 21:56:49,060 - pdf_pipeline - INFO - [green]Successfully processed Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf -> /Users/neon/Desktop/pdf-to-data/output/2023_ww_de_prt_lsv.xlsx[/green]
+2025-05-28 21:56:49,061 - pdf_pipeline - INFO - [cyan]Processing PDF: /Users/neon/Desktop/pdf-to-data/input/winterweizen-LLG sachsen-anhalt.pdf[/cyan]
+2025-05-28 21:56:49,062 - pdf_pipeline - INFO - [cyan]Found 0 configured pages to process[/cyan]
+2025-05-28 21:56:49,063 - pdf_pipeline - INFO - [cyan]No pages configured, processing all pages[/cyan]
+2025-05-28 21:56:49,137 - pdf_pipeline - DEBUG - [green]Page 1: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:49,138 - pdf_pipeline - WARNING - Page 1, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:49,295 - pdf_pipeline - DEBUG - [green]Page 2: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:49,296 - pdf_pipeline - WARNING - Page 2, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:49,367 - pdf_pipeline - DEBUG - [green]Page 3: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:49,367 - pdf_pipeline - WARNING - Page 3, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:49,425 - pdf_pipeline - DEBUG - [green]Page 4: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:49,425 - pdf_pipeline - WARNING - Page 4, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:49,469 - pdf_pipeline - DEBUG - [green]Page 5: Extracted 0 raw tables structures[/green]
+2025-05-28 21:56:49,552 - pdf_pipeline - DEBUG - [green]Page 6: Extracted 1 raw tables structures[/green]
+2025-05-28 21:56:49,552 - pdf_pipeline - WARNING - Page 6, Raw Table 0: table_type not specified in config. Cannot determine processing method.
+2025-05-28 21:56:49,601 - pdf_pipeline - DEBUG - [green]Page 7: Extracted 0 raw tables structures[/green]
+2025-05-28 21:56:49,601 - pdf_pipeline - INFO - [green]Extracted 0 tables for further transformation from winterweizen-LLG sachsen-anhalt.pdf[/green]
+2025-05-28 21:56:49,602 - pdf_pipeline - WARNING - [yellow]No tables extracted from winterweizen-LLG sachsen-anhalt.pdf[/yellow]
+2025-05-28 21:56:49,603 - pdf_pipeline - INFO - [green]PDF processing completed successfully![/green]
