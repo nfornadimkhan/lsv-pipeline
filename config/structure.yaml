@@ -4,9 +4,23 @@
 # title: title of the table
 
 pdfs:
-  - filename: "winterweizen-sv-2023.pdf"
+  # - filename: "winterweizen-sv-2023.pdf"
+  #   year: 2023
+  #   pages:
+  #     - number: 2
+  #       table_type: "relative"
+  #       treatment: "intensive"
+  #       title: "Winterweizen - Kornertrag der Sorten in den LSV NRW 2023 bei angepasstem/intensivem Pflanzenschutz"
+  #       trait: "gdy"
+  #     - number: 3
+  #       table_type: "relative"
+  #       treatment: "extensive"
+  #       title: "Winterweizen - Kornertrag der Sorten in den LSV NRW 2023 bei reduziertem Pflanzenschutz"
+  #       trait: "gdy"
+  - filename: "Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf"
     year: 2023
     pages:
+<<<<<<< HEAD
       - number: 2
         table_type: "relative"
         treatment: "intensive"
@@ -20,6 +34,8 @@ pdfs:
   - filename: "Winterweizen_Spelzweizen_2023_Versuchsbericht.pdf"
     year: 2023
     pages:
+=======
+>>>>>>> aad3dccbd548be587baef5c04477742559373fa6
       - number: 29
         table_type: "absolute"
         treatment: "both"

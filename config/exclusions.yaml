@@ -5,9 +5,19 @@
 
 exclude_columns:
   - contains: Mittelwert
-  - contains: Alle
+  - startswith: Alle
+  - startswith: Ertrag
+  - startswith: Differen
+
 exclude_rows:
-  - startswith: rel. 100
+  - startswith: rel
+  - startswith: vgl reduziert
   - startswith: Alle
   - endswith: alle
-  - contains: WDurum
+  - endswith: Latitude XL
+  - endswith: WDurum
+  - startswith: Differenz
+  - startswith: GD(LSD)
+  - startswith: VD
+  - startswith: Sorte
+  - startswith: Mittel VRS

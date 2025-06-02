@@ -2,7 +2,11 @@
 Module for processing PDF files and extracting tables.
 """
 import pdfplumber
+<<<<<<< HEAD
 from pdfplumber.page import Page # Ensure Page is imported
+=======
+from pdfplumber.page import Page
+>>>>>>> aad3dccbd548be587baef5c04477742559373fa6
 from collections import defaultdict
 import logging
 import warnings
@@ -25,6 +29,7 @@ class PDFProcessor:
         """Initialize PDF processor."""
         logger.debug("[cyan]Initializing PDFProcessor[/cyan]")
 
+<<<<<<< HEAD
     def _reconstruct_vertical_text(self, chars: List[Dict]) -> str:
         """
         Reconstruct vertical text from characters.
@@ -171,6 +176,39 @@ class PDFProcessor:
             logger.debug(f"Vertical labels: {vertical_labels}")
         
         return vertical_labels
+=======
+    def _clean_cell_text(self, cell_text: Any) -> Any:
+        """Clean up cell text by removing unnecessary newlines while preserving the content."""
+        if cell_text is None:
+            return None
+        
+        text = str(cell_text)
+        
+        # If the text contains newlines, it might be vertical text
+        if '\n' in text:
+            # Check if this looks like vertical text (single characters per line)
+            lines = text.split('\n')
+            if all(len(line.strip()) <= 3 for line in lines if line.strip()):
+                # This looks like vertical text - keep it as is for now
+                # It will be handled by the transformer
+                return text
+            else:
+                # Regular multi-line text - join with space
+                return ' '.join(line.strip() for line in lines if line.strip())
+        
+        return text
+
+    def _clean_table_data(self, raw_table_data: List[List[Any]]) -> List[List[Any]]:
+        """Clean up the raw table data by processing each cell."""
+        cleaned_table = []
+        for row in raw_table_data:
+            if row:
+                cleaned_row = [self._clean_cell_text(cell) for cell in row]
+                cleaned_table.append(cleaned_row)
+            else:
+                cleaned_table.append(row)
+        return cleaned_table
+>>>>>>> aad3dccbd548be587baef5c04477742559373fa6
 
     def extract_tables(self, pdf_path: Path, config_manager: Any = None) -> List[Dict[str, Any]]:
         """Extract tables from a PDF file."""
@@ -178,12 +216,16 @@ class PDFProcessor:
         tables_for_transformer = []
         
         try:
+<<<<<<< HEAD
             # Create output directory if it doesn't exist
             output_dir = Path('output')
             output_dir.mkdir(exist_ok=True)
             
             with pdfplumber.open(pdf_path) as pdf:
                 # Get configured pages
+=======
+            with pdfplumber.open(pdf_path) as pdf:
+>>>>>>> aad3dccbd548be587baef5c04477742559373fa6
                 pages_to_process_configs = []
                 if config_manager:
                     pages_to_process_configs = config_manager.get_pages_to_process(pdf_path.name)
@@ -199,7 +241,13 @@ class PDFProcessor:
                 # Process only configured pages
                 for page_config in pages_to_process_configs:
                     page_num = page_config['number']
+<<<<<<< HEAD
                     logger.info(f"[cyan]Processing configured page {page_num}[/cyan]")
+=======
+                    table_type_from_config = page_config.get('table_type') 
+                    treatment_from_config = page_config.get('treatment')
+                    trait_from_config = page_config.get('trait')
+>>>>>>> aad3dccbd548be587baef5c04477742559373fa6
                     
                     # Skip if page number is out of range
                     if not (1 <= page_num <= len(pdf.pages)):
@@ -226,39 +274,32 @@ class PDFProcessor:
                     current_year = None
                     if config_manager:
                         current_year = config_manager.get_pdf_year(pdf_path.name)
-                    if not current_year: # Fallback if not in PDF-level config or no config_manager
-                        current_year = self._extract_year(text_for_year_extraction, pdf_path, config_manager) # _extract_year can also use page-specific config if adapted
+                    if not current_year:
+                        current_year = self._extract_year(text_for_year_extraction, pdf_path, config_manager)
                     
                     if current_year is None:
                         logger.warning(f"[yellow]Could not determine year for page {page_num} of {pdf_path.name}. Skipping page tables.[/yellow]")
-                        # continue # Or decide if tables can be processed without a year
 
-                    # Extract vertical labels for the current page
-                    page_vertical_labels = self._get_vertical_labels_from_page(page)
-                    
                     try:
-                        # pdfplumber.page.extract_tables() returns a list of tables,
-                        # where each table is a list of rows, and each row is a list of cells.
                         extracted_page_tables = page.extract_tables()
                         logger.debug(f"[green]Page {page_num}: Extracted {len(extracted_page_tables)} raw tables structures[/green]")
                     except Exception as e:
                         logger.warning(f"[yellow]Page {page_num}: Error extracting raw tables structures: {str(e)}[/yellow]")
-                        continue # Skip this page if table extraction fails
+                        continue
                     
                     for table_idx, raw_table_data in enumerate(extracted_page_tables):
                         if not raw_table_data:
                             logger.debug(f"Page {page_num}, Raw Table {table_idx}: Empty table data, skipping.")
                             continue
                         
-                        # Determine table_type for this specific table if not globally set for page
-                        # This might involve inspecting raw_table_data or relying on config
-                        current_table_type = table_type_from_config # Use page-level config for now
+                        # Clean the table data
+                        raw_table_data = self._clean_table_data(raw_table_data)
+                        
+                        current_table_type = table_type_from_config
 
                         if not current_table_type:
-                            # Attempt to infer table type if not specified in config
-                            # For now, if not specified, we might not know how to process it.
                             logger.warning(f"Page {page_num}, Raw Table {table_idx}: table_type not specified in config. Cannot determine processing method.")
-                            continue # Or apply a default relevance check
+                            continue
 
                         table_dict_for_transformer = {
                             'page': page_num,
@@ -272,7 +313,6 @@ class PDFProcessor:
                         }
 
                         if current_table_type == "relative":
-                            # For relative tables, find the "rel. 100" row to confirm relevance and get its data
                             reference_row_content = None
                             reference_row_original_idx = -1
                             for row_content_idx, row_list in enumerate(raw_table_data):
@@ -284,17 +324,20 @@ class PDFProcessor:
                             if reference_row_content is not None:
                                 table_dict_for_transformer['reference_row_content'] = reference_row_content
                                 table_dict_for_transformer['reference_row_original_idx_in_table'] = reference_row_original_idx
+<<<<<<< HEAD
                                 table_dict_for_transformer['page_vertical_labels'] = page_vertical_labels
+=======
+>>>>>>> aad3dccbd548be587baef5c04477742559373fa6
                                 tables_for_transformer.append(table_dict_for_transformer)
                                 logger.debug(f"Page {page_num}, Raw Table {table_idx}: Identified as relevant 'relative' table. Added for transformation.")
                             else:
                                 logger.debug(f"Page {page_num}, Raw Table {table_idx}: Configured as 'relative' but no 'rel. 100' row found. Skipping.")
                         
                         elif current_table_type == "absolute":
-                            # For absolute tables, use _is_relevant_table or a similar check
                             headers = raw_table_data[0] if raw_table_data else []
                             rows = raw_table_data[1:] if len(raw_table_data) > 1 else []
                             if self._is_relevant_table(headers, rows, current_table_type):
+<<<<<<< HEAD
                                 # Handle "both" treatment type by creating two table dictionaries
                                 if treatment_from_config and treatment_from_config.lower() == "both":
                                     # Create intensive treatment table
@@ -317,6 +360,11 @@ class PDFProcessor:
                                     table_dict_for_transformer['headers'] = headers
                                     table_dict_for_transformer['rows'] = rows
                                     tables_for_transformer.append(table_dict_for_transformer)
+=======
+                                table_dict_for_transformer['headers'] = headers
+                                table_dict_for_transformer['rows'] = rows
+                                tables_for_transformer.append(table_dict_for_transformer)
+>>>>>>> aad3dccbd548be587baef5c04477742559373fa6
                                 logger.debug(f"Page {page_num}, Raw Table {table_idx}: Identified as relevant 'absolute' table. Added for transformation.")
                             else:
                                 logger.debug(f"Page {page_num}, Raw Table {table_idx}: Configured as 'absolute' but deemed not relevant. Skipping.")
@@ -331,8 +379,7 @@ class PDFProcessor:
         except Exception as e:
             logger.error(f"[red]Error processing PDF {pdf_path}: {str(e)}[/red]")
             return []
-# ... rest of PDFProcessor, including _extract_year and _is_relevant_table ...
-# Ensure _is_relevant_table is defined correctly
+
     def _extract_year(self, text: str, pdf_path: Path, config_manager: Any = None) -> Optional[int]:
         """
         Extract year from text.
@@ -363,16 +410,13 @@ class PDFProcessor:
         if not headers or not rows:
             return False
             
-        # This function is now primarily for 'absolute' tables or as a generic check if type is unknown
         if table_type == 'absolute':
-            # Example: an absolute table needs more than 2 columns and some content beyond headers
             return len(headers) > 2 and any(str(h).strip() for h in headers[1:])
         
-        # For 'relative' tables, relevance is now checked by finding "rel. 100" row directly in extract_tables.
-        # If table_type is None or other, apply a generic fallback.
         if table_type is None or table_type not in ['relative', 'absolute']:
-             return len(headers) > 1 and len(rows) > 0 # Basic check: has headers and at least one data row
+             return len(headers) > 1 and len(rows) > 0
         
+<<<<<<< HEAD
         return False # Default if type is known but not 'absolute' (e.g. 'relative' handled elsewhere)
 
     def reconstruct_vertical_text(self, text_from_cell: str) -> Optional[str]:
@@ -424,3 +468,6 @@ class PDFProcessor:
         result = result.replace("t r e w l e t t i M", "Mittelwert")
         
         return result
+=======
+        return False
+>>>>>>> aad3dccbd548be587baef5c04477742559373fa6
