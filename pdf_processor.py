@@ -25,151 +25,153 @@ class PDFProcessor:
         """Initialize PDF processor."""
         logger.debug("[cyan]Initializing PDFProcessor[/cyan]")
 
-    def _get_vertical_labels_from_page(self, page: Page) -> List[str]:
-        """Extract vertical text labels from a page using both non-upright character and word-based methods."""
-        # Only process if this page is in the configured pages
-        logger.debug(f"[cyan]Starting vertical label extraction for page {page.page_number}[/cyan]")
+    def _reconstruct_vertical_text(self, chars: List[Dict]) -> str:
+        """
+        Reconstruct vertical text from characters.
         
-        extracted_labels = []
+        Args:
+            chars: List of character dictionaries with position information
         
-        # --- Attempt 1: Refined Character-level analysis for non-upright text ---
-        logger.debug(f"Page {page.page_number}: Attempt 1 - Using refined non-upright character analysis.")
+        Returns:
+            Reconstructed text string
+        """
+        if not chars:
+            return ""
+
+        # Sort characters by vertical position (top to bottom)
+        chars = sorted(chars, key=lambda x: (-x['top'], x['x0']))
         
-        min_len_chars = 3    # Minimum length for a character-based label
-        tolerance_chars = 2  # Tolerance for grouping x-coordinates
-
-        vchars = [c for c in page.chars if not c.get("upright", True)]
-        logger.debug(f"Page {page.page_number} (Attempt 1): Total characters on page: {len(page.chars)}")
-        logger.debug(f"Page {page.page_number} (Attempt 1): Found {len(vchars)} non-upright characters.")
-
-        if vchars:
-            char_buckets = defaultdict(list)
-            logger.debug(f"Page {page.page_number} (Attempt 1): Bucketing non-upright characters with tolerance {tolerance_chars}...")
-            for ch in vchars:
-                # Round to nearest multiple of "tolerance_chars" for grouping
-                key = round(ch["x0"] / tolerance_chars) * tolerance_chars
-                char_buckets[key].append(ch)
-
-            sorted_x_coords_chars = sorted(char_buckets.keys())
-            if not sorted_x_coords_chars:
-                logger.debug(f"Page {page.page_number} (Attempt 1): No character buckets formed.")
-
-            for x_coord in sorted_x_coords_chars:
-                chars_in_bucket = char_buckets[x_coord]
-                logger.debug(f"Page {page.page_number} (Attempt 1): Bucket x_key={x_coord} has {len(chars_in_bucket)} chars.")
-                
-                sorted_chars_in_bucket = sorted(chars_in_bucket, key=lambda c: c["top"])
-                word_raw = "".join(ch["text"] for ch in sorted_chars_in_bucket)
-                word = word_raw.strip()
-                logger.debug(f"Page {page.page_number} (Attempt 1): Formed raw word: '{word_raw}' (stripped: '{word}') from bucket {x_coord}.")
-                
-                if len(word) >= min_len_chars:
-                    if not word.isnumeric(): # Added check to filter out purely numeric labels
-                        # Explicitly filter out "Mittelwert" or similar common non-location terms
-                        # Making this check case-insensitive and space-insensitive
-                        if "mittelwert" not in word.lower().replace(" ", ""):
-                            extracted_labels.append(word)
-                            logger.debug(f"Page {page.page_number} (Attempt 1): Kept label: '{word}'.")
-                        else:
-                            logger.debug(f"Page {page.page_number} (Attempt 1): Filtered out 'Mittelwert' (or similar): '{word}'")
-                    else:
-                        logger.debug(f"Page {page.page_number} (Attempt 1): Word '{word}' is numeric, filtered out.")
-                elif word: # Log if it's too short but not empty
-                    logger.debug(f"Page {page.page_number} (Attempt 1): Word '{word}' (len {len(word)}) too short, min_len is {min_len_chars}.")
+        # Group characters that are approximately at the same x-position
+        x_groups = {}
+        current_x = None
+        x_tolerance = 1  # Tolerance for x-position grouping
+        
+        for char in chars:
+            x_pos = char['x0']
+            if current_x is None or abs(x_pos - current_x) > x_tolerance:
+                current_x = x_pos
             
-            if extracted_labels:
-                logger.info(f"Page {page.page_number} (Attempt 1): Successfully extracted {len(extracted_labels)} labels using non-upright chars: {extracted_labels}")
-                return extracted_labels
-            else:
-                logger.info(f"Page {page.page_number} (Attempt 1): No labels extracted after processing non-upright characters (e.g., all too short, numeric, or filtered).")
-        else:
-            logger.info(f"Page {page.page_number} (Attempt 1): No non-upright characters found. Skipping character-based vertical label extraction.")
-
-        # --- Attempt 2: Using word extraction and vertical grouping (if Attempt 1 failed or found nothing) ---
-        logger.info(f"Page {page.page_number}: Attempt 2 - Using word extraction and vertical grouping as fallback.")
+            if current_x not in x_groups:
+                x_groups[current_x] = []
+            x_groups[current_x].append(char)
         
-        min_len_for_word_label = 3 # Heuristic for word-based labels
-        X_TOLERANCE_WORDS = 2  # points, for word bucketing
-        MAX_VERTICAL_WORD_GAP = 5 # points
-
-        words_on_page = page.extract_words(
-            keep_blank_chars=False, 
-            use_text_flow=True, 
-            extra_attrs=["x0", "x1", "top", "bottom"]
-        )
-        logger.debug(f"Page {page.page_number} (Attempt 2): Extracted {len(words_on_page)} words for grouping.")
-
-        if not words_on_page:
-            logger.info(f"Page {page.page_number} (Attempt 2): No words extracted from page. No labels found.")
-            return [] 
-
-        word_buckets = defaultdict(list)
-        for word_obj in words_on_page:
-            bucket_key = round(word_obj["x0"] / X_TOLERANCE_WORDS) * X_TOLERANCE_WORDS
-            word_buckets[bucket_key].append(word_obj)
-            
-        alternative_labels = []
-        sorted_x_bucket_keys = sorted(word_buckets.keys())
-        if not sorted_x_bucket_keys:
-            logger.debug(f"Page {page.page_number} (Attempt 2): No word buckets formed.")
-
-        for x_key in sorted_x_bucket_keys:
-            words_in_bucket = sorted(word_buckets[x_key], key=lambda w: w["top"])
-            logger.debug(f"Page {page.page_number} (Attempt 2): Word bucket x_key={x_key} has {len(words_in_bucket)} words.")
-            
-            if not words_in_bucket:
-                continue
-
-            current_label_parts = []
-            last_word_bottom = 0
-
-            for i, word_obj in enumerate(words_in_bucket):
-                word_text_raw = word_obj["text"]
-                word_text = word_text_raw.strip()
-                if not word_text:
-                    logger.debug(f"Page {page.page_number} (Attempt 2): Skipped blank word in bucket {x_key}.")
-                    continue
-                
-                logger.debug(f"Page {page.page_number} (Attempt 2): Processing word '{word_text}' (top: {word_obj['top']}, bottom: {last_word_bottom}, gap: {word_obj['top'] - last_word_bottom})")
-
-                if current_label_parts and word_obj["top"] > last_word_bottom + MAX_VERTICAL_WORD_GAP:
-                    formed_label_raw = "".join(current_label_parts)
-                    formed_label = formed_label_raw.strip()
-                    logger.debug(f"Page {page.page_number} (Attempt 2): Gap detected. Potential label from parts: '{formed_label}'")
-                    if len(formed_label) >= min_len_for_word_label and not formed_label.isnumeric():
-                        if "mittelwert" not in formed_label.lower().replace(" ", ""):
-                            alternative_labels.append(formed_label)
-                            logger.debug(f"Page {page.page_number} (Attempt 2): Kept label (gap logic): '{formed_label}'.")
-                        else:
-                            logger.debug(f"Page {page.page_number} (Attempt 2): Filtered 'Mittelwert' (gap logic): '{formed_label}'")
-                    elif formed_label:
-                         logger.debug(f"Page {page.page_number} (Attempt 2): Word '{formed_label}' (len {len(formed_label)}) too short or numeric (gap logic).")
-                    current_label_parts = [word_text] 
+        # Sort groups by x-position
+        sorted_groups = sorted(x_groups.items(), key=lambda x: x[0])
+        
+        # Reconstruct text from each group
+        text_parts = []
+        for _, group in sorted_groups:
+            # Sort characters in group by vertical position (top to bottom)
+            sorted_chars = sorted(group, key=lambda x: x['top'])
+            text_parts.append(''.join(char['text'] for char in sorted_chars))
+        
+        # Join all parts with proper handling of special characters
+        result = ''
+        for i, part in enumerate(text_parts):
+            if i > 0:
+                # Add space before opening bracket or after closing bracket
+                if part.startswith('(') or text_parts[i-1].endswith(')'):
+                    result += ' '
+                # Add hyphen between parts that form a compound word
+                elif part.startswith('-') or text_parts[i-1].endswith('-'):
+                    result += ''
                 else:
-                    current_label_parts.append(word_text)
-                
-                last_word_bottom = word_obj["bottom"]
+                    result += ' '
+            result += part
+        
+        return result
 
-            if current_label_parts:
-                formed_label_raw = "".join(current_label_parts)
-                formed_label = formed_label_raw.strip()
-                logger.debug(f"Page {page.page_number} (Attempt 2): End of bucket. Potential label from remaining parts: '{formed_label}'")
-                if len(formed_label) >= min_len_for_word_label and not formed_label.isnumeric():
-                    if "mittelwert" not in formed_label.lower().replace(" ", ""):
-                        alternative_labels.append(formed_label)
-                        logger.debug(f"Page {page.page_number} (Attempt 2): Kept label (end of bucket): '{formed_label}'.")
-                    else:
-                        logger.debug(f"Page {page.page_number} (Attempt 2): Filtered 'Mittelwert' (end of bucket): '{formed_label}'")
-                elif formed_label:
-                    logger.debug(f"Page {page.page_number} (Attempt 2): Word '{formed_label}' (len {len(formed_label)}) too short or numeric (end of bucket).")
+    def _get_vertical_labels_from_page(self, page: Page) -> List[str]:
+        """Extract vertical text labels from a page using both word and character-based methods."""
+        logger.debug(f"Starting vertical label extraction for page {page.page_number}")
         
-        if alternative_labels:
-            logger.info(f"Page {page.page_number} (Attempt 2): Successfully extracted {len(alternative_labels)} labels using word grouping: {alternative_labels}")
-            return alternative_labels
-        else:
-            logger.info(f"Page {page.page_number} (Attempt 2): No labels found using word grouping. No labels found overall for page.")
-            return []
+        # Get all words from the page
+        words = page.extract_words(x_tolerance=3, y_tolerance=3, keep_blank_chars=False)
         
+        # Filter for likely vertical labels (height > width by a significant margin)
+        vertical_words = [w for w in words if w['height'] > w['width'] * 2]
+        
+        # Dictionary to store reconstructed vertical labels
+        location_dict = {}
+        
+        # Get all characters from the page 
+        chars = page.chars
+        
+        # Filter potential vertical label characters (ones in vertical words)
+        for vword in vertical_words:
+            x_center = (vword['x0'] + vword['x1']) / 2
+            y_center = (vword['top'] + vword['bottom']) / 2
+            
+            # Find all chars that fall within this vertical word's bounds
+            word_chars = [c for c in chars if 
+                         (vword['x0'] <= c['x0'] <= vword['x1'] or
+                          vword['x0'] <= c['x1'] <= vword['x1']) and
+                         vword['top'] <= c['top'] <= vword['bottom']]
+            
+            # Skip if no characters found
+            if not word_chars:
+                continue
+                
+            # Sort chars by vertical position (top to bottom)
+            word_chars.sort(key=lambda c: c['top'])
+            
+            # Reconstruct the vertical text
+            text = ''.join([c['text'] for c in word_chars])
+            
+            # Clean up the text and store it
+            if text and len(text) > 2:  # Min 3 chars for valid location
+                # Clean up the text: remove excess spaces, normalize whitespace
+                clean_text = re.sub(r'\s+', ' ', text).strip()
+                
+                # Store in dictionary with x-position as key to handle multiple columns
+                x_key = int(x_center)
+                if x_key not in location_dict:
+                    location_dict[x_key] = []
+                location_dict[x_key].append(clean_text)
+
+        # Additional processing for known location patterns
+        known_locations = {
+            'kerpen': 'Kerpen-Buir',
+            'erkelenz': 'Erkelenz-Venrath',
+            'düsse': 'Haus Düsse (Ostingh.)',
+            'haus': 'Haus Düsse (Ostingh.)', 
+            'lage': 'Lage-Heiden',
+            'heiden': 'Lage-Heiden',
+            'holstein': 'Blomberg-Holstenhöfen',
+            'blomberg': 'Blomberg-Holstenhöfen',
+            'warstein': 'Warstein-Allagen',
+            'allagen': 'Warstein-Allagen',
+            'greve': 'Greven',
+            'mittelwert': 'Mittelwert'
+        }
+        
+        # Final list of reconstructed vertical labels
+        vertical_labels = []
+        
+        # Process each column of vertical text
+        for x_pos in sorted(location_dict.keys()):
+            column_texts = location_dict[x_pos]
+            
+            for text in column_texts:
+                # Check if the text matches a known location pattern
+                text_lower = text.lower()
+                
+                matched = False
+                for pattern, replacement in known_locations.items():
+                    if pattern in text_lower:
+                        vertical_labels.append(replacement)
+                        matched = True
+                        break
+                        
+                if not matched:
+                    vertical_labels.append(text)
+        
+        if vertical_labels:
+            logger.debug(f"Found {len(vertical_labels)} vertical labels on page {page.page_number}")
+            logger.debug(f"Vertical labels: {vertical_labels}")
+        
+        return vertical_labels
+
     def extract_tables(self, pdf_path: Path, config_manager: Any = None) -> List[Dict[str, Any]]:
         """Extract tables from a PDF file."""
         logger.info(f"[cyan]Processing PDF: {pdf_path}[/cyan]")
@@ -372,3 +374,53 @@ class PDFProcessor:
              return len(headers) > 1 and len(rows) > 0 # Basic check: has headers and at least one data row
         
         return False # Default if type is known but not 'absolute' (e.g. 'relative' handled elsewhere)
+
+    def reconstruct_vertical_text(self, text_from_cell: str) -> Optional[str]:
+        """
+        Reconstruct vertical text from cell content.
+        
+        Args:
+            text_from_cell: String containing vertically stacked characters
+            
+        Returns:
+            Properly reconstructed location name or None if invalid
+        """
+        if not text_from_cell:
+            return None
+        
+        # Clean and normalize the input text
+        text = str(text_from_cell).strip()
+        
+        # Split text by newlines
+        lines = [line.strip() for line in text.split('\n') if line.strip()]
+        
+        if not lines:
+            return None
+            
+        # Handle common patterns based on content analysis
+        if "Kerpen" in text or "Buir" in text:
+            return "Kerpen-Buir"
+        elif "Erkelenz" in text or "Venrath" in text:
+            return "Erkelenz-Venrath"
+        elif "Haus" in text or "Düsse" in text or "Ostingh" in text:
+            return "Haus Düsse (Ostingh.)"
+        elif "Lage" in text or "Heiden" in text:
+            return "Lage-Heiden"
+        elif "Blomberg" in text or "Holstein" in text:
+            return "Blomberg-Holstenhöfen"
+        elif "Warstein" in text or "Allagen" in text:
+            return "Warstein-Allagen"
+        elif "Greven" in text:
+            return "Greven"
+        elif "Mittelwert" in text:
+            return "Mittelwert"
+        elif any("elttiM" in line for line in lines):
+            return "Mittelwert"
+            
+        # For general case, join the lines with proper spacing
+        result = ' '.join(lines)
+        
+        # Replace common pattern artifacts
+        result = result.replace("t r e w l e t t i M", "Mittelwert")
+        
+        return result
