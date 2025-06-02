@@ -3,6 +3,7 @@
 Main script for PDF processing pipeline.
 """
 import typer
+import pandas as pd
 from pathlib import Path
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
@@ -106,6 +107,9 @@ def process_pdfs(
                 task = progress.add_task(f"Processing {pdf_file.name}...", total=None)
                 
                 try:
+                    # Define output file path before any processing
+                    output_file = output_dir / f"{pdf_file.stem}.xlsx"
+                    
                     # Extract tables from PDF
                     tables = pdf_processor.extract_tables(pdf_file, config_manager)
                     
@@ -113,28 +117,33 @@ def process_pdfs(
                         logger.warning(f"[yellow]No tables extracted from {pdf_file.name}[/yellow]")
                         continue
                     
-                    # Transform tables
-                    df = data_transformer.transform_tables(tables)
+                    # Transform tables to standardized format
+                    year = config_manager.get_pdf_year(pdf_file.name)
+                    if not year:
+                        logger.warning(f"[yellow]No year configuration found for {pdf_file.name}[/yellow]")
+                        continue
+
+                    # Transform tables with year information
+                    df = data_transformer.transform_tables(tables, year)
                     
                     if df.empty:
                         logger.warning(f"[yellow]No valid data extracted from {pdf_file.name}[/yellow]")
                         continue
                     
-                    # Get year from config
-                    year = config_manager.get_pdf_year(pdf_file.name)
-                    if not year:
-                        logger.warning(f"[yellow]No year configuration found for {pdf_file.name}[/yellow]")
+                    try:
+                        # Save to Excel
+                        with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
+                            df.to_excel(writer, sheet_name='Extracted Data', index=False)
+                            
+                        logger.info(f"[green]Successfully processed {pdf_file.name} -> {output_file}[/green]")
+                    except Exception as e:
+                        logger.error(f"[red]Error saving Excel file {output_file}: {str(e)}[/red]")
                         continue
-                        
-                    # Save to Excel
-                    output_file = output_dir / f"{year}_ww_de_prt_lsv.xlsx"
-                    df.to_excel(output_file, index=False)
-                    logger.info(f"[green]Successfully processed {pdf_file.name} -> {output_file}[/green]")
                     
                 except Exception as e:
                     logger.error(f"[red]Error processing {pdf_file.name}: {str(e)}[/red]")
                     continue
-                    
+                
                 progress.update(task, completed=True)
                 
         logger.info("[green]PDF processing completed successfully![/green]")
@@ -144,4 +153,4 @@ def process_pdfs(
         raise typer.Exit(1)
 
 if __name__ == "__main__":
-    app() 
+    app()

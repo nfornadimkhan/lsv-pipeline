@@ -38,9 +38,14 @@ class ConfigManager:
         return None
 
     def get_pages_to_process(self, pdf_filename: str) -> List[Dict[str, Any]]:
-        pdf_config = self.get_pdf_config(pdf_filename)
-        if pdf_config:
-            return pdf_config.get('pages', [])
+        """Get list of pages to process for a given PDF filename."""
+        for pdf_config in self.structure.get('pdfs', []):
+            if pdf_config.get('filename') == pdf_filename:
+                pages = pdf_config.get('pages', [])
+                logger.debug(f"[green]Found configuration for {pdf_filename}: {len(pages)} pages configured[/green]")
+                return pages
+                
+        logger.debug(f"[yellow]No configuration found for {pdf_filename}[/yellow]")
         return []
 
     def get_pdf_year(self, pdf_filename: str) -> Optional[int]:
@@ -66,4 +71,4 @@ class ConfigManager:
 
     def get_exclude_rows(self) -> list:
         patterns = self.exclusions.get('exclude_rows', [])
-        return self._parse_exclusion_patterns(patterns) 
+        return self._parse_exclusion_patterns(patterns)

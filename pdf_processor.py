@@ -1,15 +1,15 @@
 """
 Module for processing PDF files and extracting tables.
 """
-import pdfplumber # Ensure pdfplumber is imported if not already at the top level of imports
-from pdfplumber.page import Page
+import pdfplumber
+from pdfplumber.page import Page # Ensure Page is imported
 from collections import defaultdict
-import logging # Ensure logging is imported
-import warnings # Ensure warnings is imported
+import logging
+import warnings
 from pathlib import Path
 from typing import List, Dict, Any, Optional
-import re
 from logging_config import get_logger
+import re
 
 # Suppress all pdfminer logging
 logging.getLogger('pdfminer').setLevel(logging.ERROR)
@@ -24,84 +24,98 @@ class PDFProcessor:
     def __init__(self):
         """Initialize PDF processor."""
         logger.debug("[cyan]Initializing PDFProcessor[/cyan]")
+
     def _get_vertical_labels_from_page(self, page: Page) -> List[str]:
-        """
-        Extracts vertical text labels from a given PDF page.
-        Tries two methods:
-        1. Character-level analysis for non-upright text.
-        2. Word-level analysis with vertical grouping as a fallback.
-        Filters out common non-location labels like "Mittelwert".
-        """
-        logger.debug(f"Page {page.page_number}: Starting vertical label extraction.")
+        """Extract vertical text labels from a page using both non-upright character and word-based methods."""
+        # Only process if this page is in the configured pages
+        logger.debug(f"[cyan]Starting vertical label extraction for page {page.page_number}[/cyan]")
         
         extracted_labels = []
-        min_chars_for_label = 3  # Heuristic for character-based labels
-        min_len_for_word_label = 3 # Heuristic for word-based labels
+        
+        # --- Attempt 1: Refined Character-level analysis for non-upright text ---
+        logger.debug(f"Page {page.page_number}: Attempt 1 - Using refined non-upright character analysis.")
+        
+        min_len_chars = 3    # Minimum length for a character-based label
+        tolerance_chars = 2  # Tolerance for grouping x-coordinates
 
-        # --- Attempt 1: Using non-upright characters (existing method) ---
-        logger.debug(f"Page {page.page_number}: Attempt 1 - Using non-upright character analysis.")
-        chars = page.chars
-        # Default to True for 'upright' if key is missing, so non-upright means 'upright' is False.
-        vchars = [c for c in chars if not c.get("upright", True)] 
+        vchars = [c for c in page.chars if not c.get("upright", True)]
+        logger.debug(f"Page {page.page_number} (Attempt 1): Total characters on page: {len(page.chars)}")
+        logger.debug(f"Page {page.page_number} (Attempt 1): Found {len(vchars)} non-upright characters.")
 
         if vchars:
             char_buckets = defaultdict(list)
+            logger.debug(f"Page {page.page_number} (Attempt 1): Bucketing non-upright characters with tolerance {tolerance_chars}...")
             for ch in vchars:
-                char_buckets[round(ch["x0"])].append(ch)
-            
+                # Round to nearest multiple of "tolerance_chars" for grouping
+                key = round(ch["x0"] / tolerance_chars) * tolerance_chars
+                char_buckets[key].append(ch)
+
             sorted_x_coords_chars = sorted(char_buckets.keys())
+            if not sorted_x_coords_chars:
+                logger.debug(f"Page {page.page_number} (Attempt 1): No character buckets formed.")
+
             for x_coord in sorted_x_coords_chars:
-                sorted_chars_in_bucket = sorted(char_buckets[x_coord], key=lambda c: c["top"])
-                word = "".join(ch["text"] for ch in sorted_chars_in_bucket)
+                chars_in_bucket = char_buckets[x_coord]
+                logger.debug(f"Page {page.page_number} (Attempt 1): Bucket x_key={x_coord} has {len(chars_in_bucket)} chars.")
                 
-                if len(word) >= min_chars_for_label and not word.isnumeric():
-                    # Explicitly filter out "Mittelwert"
-                    if "mittelwert" not in word.lower().replace(" ", ""):
-                        extracted_labels.append(word)
+                sorted_chars_in_bucket = sorted(chars_in_bucket, key=lambda c: c["top"])
+                word_raw = "".join(ch["text"] for ch in sorted_chars_in_bucket)
+                word = word_raw.strip()
+                logger.debug(f"Page {page.page_number} (Attempt 1): Formed raw word: '{word_raw}' (stripped: '{word}') from bucket {x_coord}.")
+                
+                if len(word) >= min_len_chars:
+                    if not word.isnumeric(): # Added check to filter out purely numeric labels
+                        # Explicitly filter out "Mittelwert" or similar common non-location terms
+                        # Making this check case-insensitive and space-insensitive
+                        if "mittelwert" not in word.lower().replace(" ", ""):
+                            extracted_labels.append(word)
+                            logger.debug(f"Page {page.page_number} (Attempt 1): Kept label: '{word}'.")
+                        else:
+                            logger.debug(f"Page {page.page_number} (Attempt 1): Filtered out 'Mittelwert' (or similar): '{word}'")
                     else:
-                        logger.debug(f"Page {page.page_number} (Attempt 1): Filtered out 'Mittelwert' (or similar): '{word}'")
-                elif len(word) < min_chars_for_label and word.strip(): # Log skipped short non-empty text
-                    logger.debug(f"Page {page.page_number} (Attempt 1): Skipped short vertical text: '{word}' at x0={x_coord}")
+                        logger.debug(f"Page {page.page_number} (Attempt 1): Word '{word}' is numeric, filtered out.")
+                elif word: # Log if it's too short but not empty
+                    logger.debug(f"Page {page.page_number} (Attempt 1): Word '{word}' (len {len(word)}) too short, min_len is {min_len_chars}.")
             
             if extracted_labels:
-                logger.info(f"Page {page.page_number} (Attempt 1): Extracted {len(extracted_labels)} labels using non-upright chars: {extracted_labels}")
+                logger.info(f"Page {page.page_number} (Attempt 1): Successfully extracted {len(extracted_labels)} labels using non-upright chars: {extracted_labels}")
                 return extracted_labels
             else:
-                logger.info(f"Page {page.page_number} (Attempt 1): No labels found using non-upright character analysis, though non-upright chars were present.")
+                logger.info(f"Page {page.page_number} (Attempt 1): No labels extracted after processing non-upright characters (e.g., all too short, numeric, or filtered).")
         else:
-            logger.debug(f"Page {page.page_number} (Attempt 1): No non-upright characters found.")
+            logger.info(f"Page {page.page_number} (Attempt 1): No non-upright characters found. Skipping character-based vertical label extraction.")
 
         # --- Attempt 2: Using word extraction and vertical grouping (if Attempt 1 failed or found nothing) ---
-        logger.info(f"Page {page.page_number}: Attempt 2 - Using word extraction and vertical grouping.")
+        logger.info(f"Page {page.page_number}: Attempt 2 - Using word extraction and vertical grouping as fallback.")
         
-        # X_TOLERANCE: How close words need to be horizontally to be in the same bucket.
-        # Smaller values mean stricter alignment.
-        X_TOLERANCE = 2  # points
-        # MAX_VERTICAL_WORD_GAP: Max vertical distance (bottom of word A to top of word B)
-        # for words in the same x-bucket to be considered part of the same label.
-        MAX_VERTICAL_WORD_GAP = 5 # points (heuristic, might need tuning)
+        min_len_for_word_label = 3 # Heuristic for word-based labels
+        X_TOLERANCE_WORDS = 2  # points, for word bucketing
+        MAX_VERTICAL_WORD_GAP = 5 # points
 
         words_on_page = page.extract_words(
             keep_blank_chars=False, 
             use_text_flow=True, 
-            extra_attrs=["x0", "x1", "top", "bottom"] # 'text' is included by default
+            extra_attrs=["x0", "x1", "top", "bottom"]
         )
+        logger.debug(f"Page {page.page_number} (Attempt 2): Extracted {len(words_on_page)} words for grouping.")
 
         if not words_on_page:
-            logger.debug(f"Page {page.page_number} (Attempt 2): No words extracted from page.")
-            return [] # Return empty list if both attempts fail
+            logger.info(f"Page {page.page_number} (Attempt 2): No words extracted from page. No labels found.")
+            return [] 
 
         word_buckets = defaultdict(list)
         for word_obj in words_on_page:
-            # Group words by their horizontal position, rounded to the nearest X_TOLERANCE band
-            bucket_key = round(word_obj["x0"] / X_TOLERANCE) * X_TOLERANCE
+            bucket_key = round(word_obj["x0"] / X_TOLERANCE_WORDS) * X_TOLERANCE_WORDS
             word_buckets[bucket_key].append(word_obj)
             
         alternative_labels = []
         sorted_x_bucket_keys = sorted(word_buckets.keys())
+        if not sorted_x_bucket_keys:
+            logger.debug(f"Page {page.page_number} (Attempt 2): No word buckets formed.")
 
         for x_key in sorted_x_bucket_keys:
             words_in_bucket = sorted(word_buckets[x_key], key=lambda w: w["top"])
+            logger.debug(f"Page {page.page_number} (Attempt 2): Word bucket x_key={x_key} has {len(words_in_bucket)} words.")
             
             if not words_in_bucket:
                 continue
@@ -110,76 +124,100 @@ class PDFProcessor:
             last_word_bottom = 0
 
             for i, word_obj in enumerate(words_in_bucket):
-                word_text = word_obj["text"]
-                if not word_text.strip(): # Should be rare due to keep_blank_chars=False
+                word_text_raw = word_obj["text"]
+                word_text = word_text_raw.strip()
+                if not word_text:
+                    logger.debug(f"Page {page.page_number} (Attempt 2): Skipped blank word in bucket {x_key}.")
                     continue
+                
+                logger.debug(f"Page {page.page_number} (Attempt 2): Processing word '{word_text}' (top: {word_obj['top']}, bottom: {last_word_bottom}, gap: {word_obj['top'] - last_word_bottom})")
 
-                # If there are parts for the current label and a significant vertical gap to the current word
                 if current_label_parts and word_obj["top"] > last_word_bottom + MAX_VERTICAL_WORD_GAP:
-                    # Finalize the previous label
-                    formed_label = "".join(current_label_parts)
+                    formed_label_raw = "".join(current_label_parts)
+                    formed_label = formed_label_raw.strip()
+                    logger.debug(f"Page {page.page_number} (Attempt 2): Gap detected. Potential label from parts: '{formed_label}'")
                     if len(formed_label) >= min_len_for_word_label and not formed_label.isnumeric():
                         if "mittelwert" not in formed_label.lower().replace(" ", ""):
                             alternative_labels.append(formed_label)
+                            logger.debug(f"Page {page.page_number} (Attempt 2): Kept label (gap logic): '{formed_label}'.")
                         else:
-                            logger.debug(f"Page {page.page_number} (Attempt 2): Filtered 'Mittelwert': '{formed_label}' (gap logic)")
-                    elif len(formed_label) < min_len_for_word_label and formed_label.strip():
-                         logger.debug(f"Page {page.page_number} (Attempt 2): Skipped short text (gap logic): '{formed_label}'")
-                    current_label_parts = [word_text] # Start new label
+                            logger.debug(f"Page {page.page_number} (Attempt 2): Filtered 'Mittelwert' (gap logic): '{formed_label}'")
+                    elif formed_label:
+                         logger.debug(f"Page {page.page_number} (Attempt 2): Word '{formed_label}' (len {len(formed_label)}) too short or numeric (gap logic).")
+                    current_label_parts = [word_text] 
                 else:
-                    # Append to current label
                     current_label_parts.append(word_text)
                 
                 last_word_bottom = word_obj["bottom"]
 
-            # Add the last accumulated label from the bucket
             if current_label_parts:
-                formed_label = "".join(current_label_parts)
+                formed_label_raw = "".join(current_label_parts)
+                formed_label = formed_label_raw.strip()
+                logger.debug(f"Page {page.page_number} (Attempt 2): End of bucket. Potential label from remaining parts: '{formed_label}'")
                 if len(formed_label) >= min_len_for_word_label and not formed_label.isnumeric():
                     if "mittelwert" not in formed_label.lower().replace(" ", ""):
                         alternative_labels.append(formed_label)
+                        logger.debug(f"Page {page.page_number} (Attempt 2): Kept label (end of bucket): '{formed_label}'.")
                     else:
-                        logger.debug(f"Page {page.page_number} (Attempt 2): Filtered 'Mittelwert': '{formed_label}' (end of bucket)")
-                elif len(formed_label) < min_len_for_word_label and formed_label.strip():
-                    logger.debug(f"Page {page.page_number} (Attempt 2): Skipped short text (end of bucket): '{formed_label}'")
+                        logger.debug(f"Page {page.page_number} (Attempt 2): Filtered 'Mittelwert' (end of bucket): '{formed_label}'")
+                elif formed_label:
+                    logger.debug(f"Page {page.page_number} (Attempt 2): Word '{formed_label}' (len {len(formed_label)}) too short or numeric (end of bucket).")
         
         if alternative_labels:
-            logger.info(f"Page {page.page_number} (Attempt 2): Extracted {len(alternative_labels)} labels using word grouping: {alternative_labels}")
+            logger.info(f"Page {page.page_number} (Attempt 2): Successfully extracted {len(alternative_labels)} labels using word grouping: {alternative_labels}")
             return alternative_labels
         else:
-            logger.info(f"Page {page.page_number} (Attempt 2): No labels found using word grouping.")
-            return [] # Return empty list if both attempts fail
+            logger.info(f"Page {page.page_number} (Attempt 2): No labels found using word grouping. No labels found overall for page.")
+            return []
         
     def extract_tables(self, pdf_path: Path, config_manager: Any = None) -> List[Dict[str, Any]]:
         """Extract tables from a PDF file."""
         logger.info(f"[cyan]Processing PDF: {pdf_path}[/cyan]")
-        tables_for_transformer = [] # Renamed to avoid confusion
-        # year = None # year is extracted per page or from config, not a single value for the whole PDF initially
+        tables_for_transformer = []
         
         try:
-            with pdfplumber.open(pdf_path) as pdf: # Removed pages=None, it's default
+            # Create output directory if it doesn't exist
+            output_dir = Path('output')
+            output_dir.mkdir(exist_ok=True)
+            
+            with pdfplumber.open(pdf_path) as pdf:
+                # Get configured pages
                 pages_to_process_configs = []
                 if config_manager:
                     pages_to_process_configs = config_manager.get_pages_to_process(pdf_path.name)
-                    logger.info(f"[cyan]Found {len(pages_to_process_configs)} configured pages to process[/cyan]")
-                
-                if not pages_to_process_configs:
-                    logger.info("[cyan]No pages configured, processing all pages[/cyan]")
-                    # Create a default config for each page if none provided
-                    pages_to_process_configs = [{'number': i + 1, 'table_type': None, 'treatment': None, 'trait': None} for i in range(len(pdf.pages))]
-                
+                    if not pages_to_process_configs:
+                        logger.info(f"[yellow]No pages configured for {pdf_path.name}, skipping file[/yellow]")
+                        return []
+                    configured_page_numbers = [p['number'] for p in pages_to_process_configs]
+                    logger.info(f"[cyan]Found {len(pages_to_process_configs)} configured pages to process: {configured_page_numbers}[/cyan]")
+                else:
+                    logger.warning(f"[yellow]No config_manager provided for {pdf_path.name}, skipping file[/yellow]")
+                    return []
+            
+                # Process only configured pages
                 for page_config in pages_to_process_configs:
                     page_num = page_config['number']
-                    # Ensure table_type is fetched, default if necessary, or handle if None later
-                    table_type_from_config = page_config.get('table_type') 
-                    treatment_from_config = page_config.get('treatment')
-                    trait_from_config = page_config.get('trait')
+                    logger.info(f"[cyan]Processing configured page {page_num}[/cyan]")
                     
+                    # Skip if page number is out of range
                     if not (1 <= page_num <= len(pdf.pages)):
                         logger.warning(f"[yellow]Page number {page_num} is out of range for PDF {pdf_path.name} with {len(pdf.pages)} pages. Skipping.[/yellow]")
                         continue
                         
-                    page = pdf.pages[page_num - 1]
+                    # Get page configuration
+                    table_type_from_config = page_config.get('table_type')
+                    treatment_from_config = page_config.get('treatment')
+                    trait_from_config = page_config.get('trait')
+                    
+                    # Only process this specific page
+                    page = pdf.pages[page_num - 1]  # Convert to 0-based index
+                    
+                    # Extract text and tables only for this page
+                    page_vertical_labels = self._get_vertical_labels_from_page(page)
+                    if page_vertical_labels:
+                        logger.info(f"[green]Found vertical labels on page {page_num}: {page_vertical_labels}[/green]")
+                
+                    # Process tables on this page
                     text_for_year_extraction = page.extract_text() or ""
                     
                     # Year extraction logic
@@ -225,10 +263,10 @@ class PDFProcessor:
                             'table_num_on_page': table_idx,
                             'year': current_year,
                             'table_type': current_table_type,
-                            'treatment': treatment_from_config,
+                            'treatment': treatment_from_config,  # This needs to be handled differently
                             'source': pdf_path.name,
                             'trait': trait_from_config,
-                            'raw_table_data': raw_table_data # Pass the entire extracted table
+                            'raw_table_data': raw_table_data
                         }
 
                         if current_table_type == "relative":
@@ -244,7 +282,7 @@ class PDFProcessor:
                             if reference_row_content is not None:
                                 table_dict_for_transformer['reference_row_content'] = reference_row_content
                                 table_dict_for_transformer['reference_row_original_idx_in_table'] = reference_row_original_idx
-                                table_dict_for_transformer['page_vertical_labels'] = page_vertical_labels # Add extracted vertical labels
+                                table_dict_for_transformer['page_vertical_labels'] = page_vertical_labels
                                 tables_for_transformer.append(table_dict_for_transformer)
                                 logger.debug(f"Page {page_num}, Raw Table {table_idx}: Identified as relevant 'relative' table. Added for transformation.")
                             else:
@@ -254,11 +292,29 @@ class PDFProcessor:
                             # For absolute tables, use _is_relevant_table or a similar check
                             headers = raw_table_data[0] if raw_table_data else []
                             rows = raw_table_data[1:] if len(raw_table_data) > 1 else []
-                            if self._is_relevant_table(headers, rows, current_table_type): # Pass 'absolute'
-                                # For absolute tables, 'headers' and 'rows' are more direct
-                                table_dict_for_transformer['headers'] = headers
-                                table_dict_for_transformer['rows'] = rows
-                                tables_for_transformer.append(table_dict_for_transformer)
+                            if self._is_relevant_table(headers, rows, current_table_type):
+                                # Handle "both" treatment type by creating two table dictionaries
+                                if treatment_from_config and treatment_from_config.lower() == "both":
+                                    # Create intensive treatment table
+                                    intensive_dict = table_dict_for_transformer.copy()
+                                    intensive_dict['treatment'] = 'intensive'
+                                    intensive_dict['headers'] = headers
+                                    intensive_dict['rows'] = rows
+                                    tables_for_transformer.append(intensive_dict)
+                                    logger.debug(f"Page {page_num}, Raw Table {table_idx}: Added 'intensive' treatment table.")
+
+                                    # Create extensive treatment table
+                                    extensive_dict = table_dict_for_transformer.copy()
+                                    extensive_dict['treatment'] = 'extensive'
+                                    extensive_dict['headers'] = headers
+                                    extensive_dict['rows'] = rows
+                                    tables_for_transformer.append(extensive_dict)
+                                    logger.debug(f"Page {page_num}, Raw Table {table_idx}: Added 'extensive' treatment table.")
+                                else:
+                                    # Original behavior for non-"both" treatment
+                                    table_dict_for_transformer['headers'] = headers
+                                    table_dict_for_transformer['rows'] = rows
+                                    tables_for_transformer.append(table_dict_for_transformer)
                                 logger.debug(f"Page {page_num}, Raw Table {table_idx}: Identified as relevant 'absolute' table. Added for transformation.")
                             else:
                                 logger.debug(f"Page {page_num}, Raw Table {table_idx}: Configured as 'absolute' but deemed not relevant. Skipping.")
@@ -266,6 +322,8 @@ class PDFProcessor:
                             logger.warning(f"Page {page_num}, Raw Table {table_idx}: Unknown or unhandled table_type '{current_table_type}'. Skipping.")
                             
             logger.info(f"[green]Extracted {len(tables_for_transformer)} tables for further transformation from {pdf_path.name}[/green]")
+            
+            # Return the tables without trying to save them here
             return tables_for_transformer
             
         except Exception as e:

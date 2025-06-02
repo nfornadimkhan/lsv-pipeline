@@ -208,82 +208,191 @@ class DataTransformer:
         logger.info(f"[green]Transformed {len(transformed_rows)} rows from relative table for trait '{trait_str}'[/green]")
         return transformed_rows
 
-    def transform_tables(self, tables_from_processor: List[Dict[str, Any]]) -> pd.DataFrame:
-        """Transform extracted tables into standardized format."""
-        all_transformed_data = []
+    def transform_tables(self, tables_from_processor: List[Dict[str, Any]], year: int) -> pd.DataFrame:
+        """
+        Transform extracted tables into a standardized format.
         
-        for table_data_dict in tables_from_processor:
-            try:
-                year_val = table_data_dict.get('year')
-                table_type = table_data_dict.get('table_type')
-                
-                if year_val is None: # Ensure year is present
-                    logger.warning(f"Skipping table transformation, year is None. Source: {table_data_dict.get('source')}")
-                    continue
-                if not isinstance(year_val, int): # Ensure year is int
-                    try:
-                        year_val = int(year_val)
-                    except ValueError:
-                        logger.warning(f"Skipping table transformation, year '{year_val}' is not a valid integer. Source: {table_data_dict.get('source')}")
-                        continue
-                
-                if table_type == 'relative':
-                    # Pass the whole table_data_dict to _transform_relative_table
-                    all_transformed_data.extend(
-                        self._transform_relative_table(year_val, table_data_dict)
-                    )
-                elif table_type == 'absolute':
-                    # Ensure _transform_absolute_table also gets what it needs from table_data_dict
-                    headers = table_data_dict.get('headers')
-                    rows = table_data_dict.get('rows')
-                    treatment = table_data_dict.get('treatment')
-                    source = table_data_dict.get('source')
-                    trait = table_data_dict.get('trait')
-                    if headers and rows:
-                         all_transformed_data.extend(
-                            self._transform_absolute_table(year_val, headers, rows, treatment, source, trait)
-                        )
-                    else:
-                        logger.warning(f"Missing headers/rows for absolute table. Source: {source}")
-                # ... other table types
-            except Exception as e:
-                logger.error(f"Error during table transformation dispatch: {str(e)} for table from {table_data_dict.get('source')}", exc_info=True)
-                continue
+        Args:
+            tables_from_processor: List of dictionaries containing raw table data
+            year: Year of the trials
+            
+        Returns:
+            DataFrame with standardized columns:
+            - Year
+            - Trial
+            - Trait
+            - Variety
+            - Location
+            - Treatment
+            - RelativeValue
+            - AbsoluteValue
+            - Source
+        """
+        all_transformed_rows = []
         
-        df = pd.DataFrame(all_transformed_data, columns=self.standard_columns)
-        df = self._clean_data(df) # Assuming _clean_data is defined
+        for table in tables_from_processor:
+            table_type = table.get('table_type')
+            treatment = table.get('treatment')
+            source = table.get('source')
+            trait = table.get('trait')
+            
+            if table_type == 'relative':
+                transformed_rows = self._transform_relative_table(
+                    year=year,
+                    table_dict=table
+                )
+                all_transformed_rows.extend(transformed_rows)
+                
+            elif table_type == 'absolute':
+                transformed_rows = self._transform_absolute_table(
+                    year=year,
+                    headers=table.get('headers', []),
+                    rows=table.get('rows', []),
+                    treatment=treatment,
+                    source=source,
+                    trait=trait
+                )
+                all_transformed_rows.extend(transformed_rows)
+        
+        if not all_transformed_rows:
+            return pd.DataFrame(columns=self.standard_columns)
+        
+        # Convert to DataFrame and ensure all standard columns are present
+        df = pd.DataFrame(all_transformed_rows)
+        for col in self.standard_columns:
+            if col not in df.columns:
+                df[col] = None
+                
+        # Reorder columns to match standard format
+        df = df[self.standard_columns]
+        
+        # Sort by Treatment, Location, and Variety
+        df.sort_values(['Treatment', 'Location', 'Variety'], inplace=True)
+        
         return df
     
     # Ensure reconstruct_vertical_text is available if used in fallback
     def reconstruct_vertical_text(self, text_from_cell: str) -> Optional[str]:
-        # ... (your existing implementation of this function)
-        if not text_from_cell: return None
-        parts_raw = text_from_cell.split('\n')
-        parts_stripped = [p.strip() for p in parts_raw if p.strip()]
-        if not parts_stripped: return None
-        reconstructed_name = "".join(parts_stripped)
-        reconstructed_name = " ".join(reconstructed_name.split())
-        return reconstructed_name if reconstructed_name else None
+        """
+        Reconstruct vertical text from cell content.
         
-    def _transform_absolute_table(self, year: int, headers: list, rows: list, treatment: Optional[str] = None, # Use Optional for clarity
-                                  source: Optional[str] = None, trait: Optional[str] = None) -> list:
+        Args:
+            text_from_cell: String containing vertically stacked characters
+            
+        Returns:
+            Properly reconstructed location name or None if invalid
+        """
+        if not text_from_cell:
+            return None
+            
+        # Split into lines and filter out empty/whitespace-only lines
+        parts = [p.strip() for p in text_from_cell.split('\n') if p.strip()]
+        
+        if not parts:
+            return None
+            
+        # Special handling for location names with brackets
+        if any('(' in p or ')' in p for p in parts):
+            # Find opening and closing bracket indices
+            start_idx = next((i for i, p in enumerate(parts) if '(' in p), -1)
+            end_idx = next((i for i, p in enumerate(parts) if ')' in p), -1)
+            
+            if start_idx != -1 and end_idx != -1 and start_idx < end_idx:
+                # Handle text before brackets
+                before_brackets = ''.join(parts[:start_idx])
+                
+                # Handle text inside brackets
+                in_brackets = ''.join(parts[start_idx:end_idx+1])
+                in_brackets = in_brackets.replace('(', ' (').replace(')', ') ')
+                
+                # Handle text after brackets
+                after_brackets = ''.join(parts[end_idx+1:])
+                
+                # Combine all parts
+                return (before_brackets + in_brackets + after_brackets).strip()
+        
+        # Handle hyphenated location names
+        if any('-' in p for p in parts):
+            result = []
+            current_word = []
+            
+            for part in parts:
+                if '-' in part:
+                    if current_word:
+                        result.append(''.join(current_word))
+                        current_word = []
+                    result.append(part)
+                else:
+                    current_word.append(part)
+            
+            if current_word:
+                result.append(''.join(current_word))
+                
+            return ' '.join(result)
+        
+        # Standard case: join all characters
+        return ''.join(parts)
+    
+    def _clean_location_name(self, location: str) -> str:
+        """
+        Clean and format location names.
+        
+        Args:
+            location: Raw location name string
+            
+        Returns:
+            Cleaned location name
+        """
+        if not location:
+            return ""
+            
+        # If location appears to be vertical text
+        if '\n' in location:
+            reconstructed = self.reconstruct_vertical_text(location)
+            if reconstructed:
+                return reconstructed
+                
+        return location.strip()
+        
+    def _transform_absolute_table(self, year: int, headers: list, rows: list, 
+                            treatment: Optional[str] = None,
+                            source: Optional[str] = None, 
+                            trait: Optional[str] = None) -> list:
         transformed_rows = []
-        location_cols = [i for i, h in enumerate(headers) if h and not any(x in str(h).lower() for x in ['sorte', 'qualität']) and str(h).strip() not in self.exclude_columns]
+        location_cols = [i for i, h in enumerate(headers) if h and not any(x in str(h).lower() 
+                    for x in ['sorte', 'qualität']) and str(h).strip() not in self.exclude_columns]
         
-        # Use trait from config or default
         trait_str = trait if trait else "Default Trait"
         
         for row in rows:
             if not row or any("Mittel" in str(cell) for cell in row):
                 continue
+                
             variety = row[0]
             if not variety or "Mittel" in str(variety) or variety.strip() in self.exclude_rows:
                 continue
-            if treatment and treatment != 'Both':
-                for loc_idx in location_cols:
-                    location = headers[loc_idx]
-                    if not location:
-                        continue
+
+            # Handle both single treatment and 'Both' cases consistently
+            treatments_to_process = []
+            if treatment == 'Both':
+                treatments_to_process = ['intensive', 'extensive']  # Changed from 'St 1'/'St 2' to match relative table
+            else:
+                treatments_to_process = [treatment if treatment else 'Standard']  # Use 'Standard' as fallback like relative table
+
+            for loc_idx in location_cols:
+                location = headers[loc_idx]
+                if not location:
+                    continue
+                
+                # Clean location name
+                location = self._clean_location_name(location)
+                
+                # Skip if location name cleaning failed
+                if not location:
+                    continue
+
+                if len(treatments_to_process) == 1:
+                    # Single treatment case
                     value = self._clean_value(row[loc_idx])
                     if value is not None:
                         transformed_rows.append({
@@ -292,42 +401,48 @@ class DataTransformer:
                             'Trait': trait_str,
                             'Variety': variety,
                             'Location': location,
-                            'Treatment': treatment,
-                            'RelativeValue': None,
+                            'Treatment': treatments_to_process[0],
+                            'RelativeValue': None,  # Could calculate if needed
                             'AbsoluteValue': value,
                             'Source': source
                         })
-            else:
-                for loc_idx in location_cols:
-                    location = headers[loc_idx]
-                    if not location:
-                        continue
+                else:
+                    # 'Both' treatment case - handle intensive and extensive
                     st1_idx = loc_idx + 1
                     st2_idx = loc_idx + 2
+                    
+                    # Process intensive treatment (St 1)
                     if st1_idx < len(row) and row[st1_idx]:
-                        transformed_rows.append({
-                            'Year': year,
-                            'Trial': f"{year}_whw_de_prt_lsv",
-                            'Trait': trait_str,
-                            'Variety': variety,
-                            'Location': location,
-                            'Treatment': 'St 1',
-                            'RelativeValue': None,
-                            'AbsoluteValue': self._clean_value(row[st1_idx]),
-                            'Source': source
-                        })
+                        value = self._clean_value(row[st1_idx])
+                        if value is not None:
+                            transformed_rows.append({
+                                'Year': year,
+                                'Trial': f"{year}_whw_de_prt_lsv",
+                                'Trait': trait_str,
+                                'Variety': variety,
+                                'Location': location,
+                                'Treatment': 'intensive',
+                                'RelativeValue': None,  # Could calculate if needed
+                                'AbsoluteValue': value,
+                                'Source': source
+                            })
+                    
+                    # Process extensive treatment (St 2)
                     if st2_idx < len(row) and row[st2_idx]:
-                        transformed_rows.append({
-                            'Year': year,
-                            'Trial': f"{year}_whw_de_prt_lsv",
-                            'Trait': trait_str,
-                            'Variety': variety,
-                            'Location': location,
-                            'Treatment': 'St 2',
-                            'RelativeValue': None,
-                            'AbsoluteValue': self._clean_value(row[st2_idx]),
-                            'Source': source
-                        })
+                        value = self._clean_value(row[st2_idx])
+                        if value is not None:
+                            transformed_rows.append({
+                                'Year': year,
+                                'Trial': f"{year}_whw_de_prt_lsv",
+                                'Trait': trait_str,
+                                'Variety': variety,
+                                'Location': location,
+                                'Treatment': 'extensive',
+                                'RelativeValue': None,  # Could calculate if needed
+                                'AbsoluteValue': value,
+                                'Source': source
+                            })
+
         return transformed_rows
         
     def _clean_value(self, value: Any) -> Optional[float]: # Allow Any type for input value
@@ -381,3 +496,27 @@ class DataTransformer:
                 return True
                 
         return False
+
+    def save_to_excel(self, transformed_data: pd.DataFrame, pdf_path: Path) -> None:
+        """
+        Save transformed data to Excel file with name matching the source PDF.
+        
+        Args:
+            transformed_data: DataFrame containing the transformed table data
+            pdf_path: Original PDF file path
+        """
+        try:
+            # Create output directory if it doesn't exist
+            output_dir = Path('output')
+            output_dir.mkdir(exist_ok=True)
+            
+            # Get output filename - replace .pdf with .xlsx
+            output_filename = pdf_path.stem + '.xlsx'
+            output_path = output_dir / output_filename
+            
+            # Save to Excel
+            transformed_data.to_excel(output_path, index=False)
+            logger.info(f"[green]Successfully saved transformed data to {output_path}[/green]")
+            
+        except Exception as e:
+            logger.error(f"[red]Error saving transformed data to Excel: {str(e)}[/red]")
